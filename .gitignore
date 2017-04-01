@@ -47,3 +47,7 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
+
+
+# Ignoring Config File
+src/config/dbconfig.properties

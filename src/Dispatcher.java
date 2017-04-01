@@ -21,6 +21,7 @@ import com.zaxxer.hikari.HikariDataSource;
 public class Dispatcher {
 
 	protected Hashtable _htblCommands;
+	protected Hashtable<String, String> _htblConfig;
 	protected ExecutorService _threadPoolCmds;
 	protected HikariDataSource _hikariDataSource;
 
@@ -339,12 +340,11 @@ public class Dispatcher {
 			sqlProc.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	protected void loadHikari(String strAddress, int nPort, String strDBName,
+	protected void loadHikari(String strAddress, String nPort, String strDBName,
 			String strUserName, String strPassword) {
 
 		_hikariDataSource = new HikariDataSource();
@@ -372,13 +372,30 @@ public class Dispatcher {
 		}
 	}
 
+	protected void loadConfig() throws Exception {
+		_htblConfig = new Hashtable();
+		Properties prop = new Properties();
+		InputStream in = getClass().getResourceAsStream("config/dbconfig.properties");
+		prop.load(in);
+		in.close();
+		Enumeration enumKeys = prop.propertyNames();
+		String strConfigName;
+
+		while (enumKeys.hasMoreElements()) {
+			strConfigName = (String) enumKeys.nextElement();
+			_htblConfig.put(strConfigName, prop.get(strConfigName).toString());
+		}
+	}
+
 	protected void loadThreadPool() {
 		_threadPoolCmds = Executors.newFixedThreadPool(20);
 	}
 
 	public void init() throws Exception {
-		loadHikari("localhost", 5432, "abkreno", "postgres", "6g6g000");
-		loadThreadPool();
+		loadConfig();
 		loadCommands();
+		loadHikari("localhost", _htblConfig.get("dbPortNumber"), _htblConfig.get("dbUserName"),
+				_htblConfig.get("dbName"), _htblConfig.get("dbPassword"));
+		loadThreadPool();
 	}
 }
