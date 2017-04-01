@@ -8,7 +8,6 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.util.List;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,7 +21,6 @@ import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.CharsetUtil;
 
 public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
@@ -104,25 +102,6 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 				}
 			}
 		}
-	}
-
-	private static void sendHttpResponse(ChannelHandlerContext ctx, HttpRequest req,
-			FullHttpResponse res) {
-		// Generate an error page if response getStatus code is not OK (200).
-		if (res.status().code() != 200) {
-			ByteBuf buf = Unpooled.copiedBuffer(res.status().toString(),
-					CharsetUtil.UTF_8);
-			res.content().writeBytes(buf);
-			buf.release();
-			HttpHeaderUtil.setContentLength(res, res.content().readableBytes());
-		}
-
-		// Send the response and close the connection if necessary.
-		ChannelFuture f = ctx.channel().writeAndFlush(res);
-		/*
-		 * if (!HttpHeaderUtil.isKeepAlive(req) || res.status().code() != 200) {
-		 * f.addListener(ChannelFutureListener.CLOSE); }
-		 */
 	}
 
 	private boolean writeResponse(HttpObject currentObj, ChannelHandlerContext ctx) {
