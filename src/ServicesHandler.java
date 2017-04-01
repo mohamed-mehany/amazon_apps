@@ -1,22 +1,29 @@
 
-import io.netty.util.*;
-import io.netty.channel.*;
-import io.netty.buffer.*;
-import io.netty.handler.codec.*;
-import io.netty.handler.codec.http.*;
+import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
+import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
+import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
+import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
+import static io.netty.handler.codec.http.HttpResponseStatus.OK;
+import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
-import static io.netty.handler.codec.http.HttpHeaderNames.*;
-import static io.netty.handler.codec.http.HttpResponseStatus.*;
-import static io.netty.handler.codec.http.HttpVersion.*;
-
-import io.netty.handler.codec.http.multipart.MixedAttribute;
-import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpHeaderUtil;
+import io.netty.handler.codec.http.HttpHeaderValues;
+import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpObject;
+import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
+import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.util.CharsetUtil;
 
 public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 
@@ -79,12 +86,12 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 						System.err.println(i + " " + temp);
 						i++;
 					}
-					
+
 					_controller.execRequest(new ClientHandle(ctx, request, this));
 					synchronized (this) {
 						this.wait();
 					}
-				
+
 					if (buf != null) {
 						System.err.println(" sending back" + buf.toString());
 						writeResponse(request, ctx);
@@ -137,8 +144,11 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 			response.headers().set(CONNECTION, HttpHeaderValues.KEEP_ALIVE);
 		}
 		// Write the response.
-		ctx.write(response);
-
+		ChannelFuture cf = ctx.write(response);
+		ctx.flush();
+		if (!cf.isSuccess()) {
+			System.out.println("Send failed: " + cf.cause());
+		}
 		return keepAlive;
 	}
 
