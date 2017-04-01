@@ -85,13 +85,8 @@ public class Dispatcher {
 
 			if (strbufResponseData != null) {
 				if (strbufResponseData.charAt(0) == '[')
-					strbufJSON.append("\"responseData\":" + strbufResponseData); // if
-																					// it
-																					// is
-																					// a
-																					// list,
-																					// no
-																					// curley
+					// if it is a list, no curley
+					strbufJSON.append("\"responseData\":" + strbufResponseData);
 				else
 					strbufJSON.append("\"responseData\":{" + strbufResponseData + "}");
 			}
@@ -330,7 +325,6 @@ public class Dispatcher {
 			sqlProc.setString(5, strLastName);
 
 			sqlProc.execute();
-			int ans = sqlProc.getInt(1);
 			sqlProc.close();
 
 		} catch (SQLException e) {
@@ -347,7 +341,7 @@ public class Dispatcher {
 				"jdbc:postgresql://" + strAddress + ":" + nPort + "/" + strDBName);
 		_hikariDataSource.setUsername(strUserName);
 		_hikariDataSource.setPassword(strPassword);
-		//testHikari();
+		// testHikari();
 	}
 
 	protected void loadCommands() throws Exception {
