@@ -1,0 +1,8 @@
+{
+    "dbConfig": {
+        "dbName": "DB_NAME",
+        "dbUserName": "DB_UNAME",
+        "dbPassword": "DB_PASS",
+        "dbPortNumber": "5432"
+    }
+}
