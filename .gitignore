@@ -50,4 +50,4 @@ local.properties
 
 
 # Ignoring Config File
-src/config/dbconfig.properties
+config/settings.json

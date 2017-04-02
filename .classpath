@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/postgresql-9.3-1102.jdbc41.jar"/>
 	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/slf4j-api-1.7.10.jar"/>
 	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/slf4j-jdk14-1.7.10.jar"/>
+	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/minimal-json-0.9.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

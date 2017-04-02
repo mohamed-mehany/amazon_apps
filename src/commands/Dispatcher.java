@@ -103,10 +103,8 @@ public class Dispatcher {
 	}
 
 	protected void loadSettings() throws Exception {
-		JsonObject settingsFile = JsonObject
-				.readFrom(new FileReader("config/settings.json"));
-		loadDBConfig(settingsFile);
-		loadCommands(settingsFile);
+		loadDBConfig(JsonObject.readFrom(new FileReader("config/commands.json")));
+		loadCommands(JsonObject.readFrom(new FileReader("config/settings.json")));
 	}
 
 	protected void loadThreadPool() {
