@@ -8,13 +8,21 @@ import java.util.Map;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-public 	abstract class Command {
+import controller.ClientHandle;
+import controller.ClientRequest;
+import controller.ResponseCodes;
+
+public abstract class Command {
 
 	protected HikariDataSource _hikariDataSource;
 	protected ClientHandle _clientHandle;
 	protected ClientRequest _clientRequest;
 
 	protected ArrayList<String> _arrColsToKeep;
+
+	public Command() {
+
+	}
 
 	public void init(HikariDataSource hikariDataSource, ClientHandle clientHandle,
 			ClientRequest clientRequest) {
@@ -65,8 +73,7 @@ public 	abstract class Command {
 		strbufJSON.append("{");
 		strbufJSON.append("\"responseTo\":\"" + _clientRequest.getAction() + "\",");
 		if (_clientRequest.getSessionID() != null)
-			strbufJSON.append(
-					"\"sessionID\":\"" + _clientRequest.getSessionID() + "\",");
+			strbufJSON.append("\"sessionID\":\"" + _clientRequest.getSessionID() + "\",");
 
 		strbufJSON.append("\"StatusID\":\"" + nResponse + "\",");
 		strStatusMsg = (String) ResponseCodes.getMessage(Integer.toString(nResponse));
@@ -145,8 +152,7 @@ public 	abstract class Command {
 					else if (rsmd.getColumnType(nIndex) == java.sql.Types.DATE)
 						strbufJSON.append("\"" + resultSet.getDate(nIndex) + "\"");
 					else if (rsmd.getColumnType(nIndex) == java.sql.Types.TIMESTAMP)
-						strbufJSON
-								.append("\"" + resultSet.getTimestamp(nIndex) + "\"");
+						strbufJSON.append("\"" + resultSet.getTimestamp(nIndex) + "\"");
 					else
 						strbufJSON.append("\"" + resultSet.getObject(nIndex) + "\"");
 
