@@ -42,7 +42,7 @@
 - add the external jars under the `libs/` directory
 - create a new file `settings.json` under the `config/` directory
 - add the configrution to the file (you will find an example in `config/settings.example.json`) 
-- run the app
+- run the class services/Services.java
 
 
 
