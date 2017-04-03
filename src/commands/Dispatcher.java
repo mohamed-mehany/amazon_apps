@@ -11,8 +11,10 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonObject.Member;
+import com.eclipsesource.json.JsonValue;
 import com.zaxxer.hikari.HikariDataSource;
 
 import controller.ClientHandle;
@@ -76,23 +78,32 @@ public class Dispatcher {
 		// testHikari();
 	}
 
-	protected void loadCommands(JsonObject settings) throws Exception {
+	protected void loadCommands() throws Exception {
 		_htblCommands = new Hashtable<String, Class<?>>();
-		JsonObject commands = settings.get("commands").asObject();
-		String strActionName, strClassName;
-		Iterator<Member> it = commands.iterator();
+		String strActionName, strClassName, strPackageName;
+		JsonArray allowedCommands = JsonObject
+				.readFrom(new FileReader("config/settings.json")).get("allowedCommands")
+				.asArray();
+		JsonObject commands = JsonObject.readFrom(new FileReader("config/commands.json"));
+		Iterator<JsonValue> it = allowedCommands.iterator();
 		while (it.hasNext()) {
-			Member member = it.next();
-			strActionName = member.getName();
-			strClassName = member.getValue().asString();
-			Class<?> innerClass = Class.forName(strClassName);
-			_htblCommands.put(strActionName, innerClass);
+			strPackageName = it.next().asString();
+			JsonObject commandObj = commands.get(strPackageName).asObject();
+			Iterator<Member> it2 = commandObj.iterator();
+			while (it2.hasNext()) {
+				Member member = it2.next();
+				strActionName = member.getName();
+				strClassName = member.getValue().asString();
+				Class<?> innerClass = Class.forName(strPackageName + '.' + strClassName);
+				_htblCommands.put(strActionName, innerClass);
+			}
 		}
 	}
 
-	protected void loadDBConfig(JsonObject settings) throws Exception {
+	protected void loadDBConfig() throws Exception {
 		_htblConfig = new Hashtable<String, String>();
-		JsonObject commands = settings.get("dbConfig").asObject();
+		JsonObject commands = JsonObject.readFrom(new FileReader("config/settings.json"))
+				.get("dbConfig").asObject();
 		Iterator<Member> it = commands.iterator();
 		while (it.hasNext()) {
 			Member member = it.next();
@@ -102,8 +113,8 @@ public class Dispatcher {
 	}
 
 	protected void loadSettings() throws Exception {
-		loadDBConfig(JsonObject.readFrom(new FileReader("config/commands.json")));
-		loadCommands(JsonObject.readFrom(new FileReader("config/settings.json")));
+		loadDBConfig();
+		loadCommands();
 	}
 
 	protected void loadThreadPool() {
@@ -112,7 +123,7 @@ public class Dispatcher {
 
 	public void init() throws Exception {
 		loadSettings();
-		loadHikari("localhost", _htblConfig.get("dbPortNumber"),
+		loadHikari(_htblConfig.get("dbHostName"), _htblConfig.get("dbPortNumber"),
 				_htblConfig.get("dbUserName"), _htblConfig.get("dbName"),
 				_htblConfig.get("dbPassword"));
 		loadThreadPool();

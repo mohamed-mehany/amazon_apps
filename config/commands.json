@@ -1,4 +1,6 @@
 {
-    "addUserSimple": "commands.user.AddUserSimpleCmd",
-    "attemplogin": "commands.user.AttemptLoginCmd"
+	"commands.user": {
+		"addUserSimple": "AddUserSimpleCmd",
+		"attemplogin": "AttemptLoginCmd"		
+	}
 }
