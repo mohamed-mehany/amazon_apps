@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.mysql.jdbc.Driver;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonObject.Member;
@@ -44,20 +45,27 @@ public class Dispatcher {
 	}
 
 	protected void testHikari() {
+		String strFirstName = "Hello";
 		String strEmail = "mohamed123@m.com";
 		String strPassword = "123";
-		String strFirstName = "Hello";
-		String strLastName = "World";
-
+		String strAddress = "World";
+		String strDate = "2012.01.01 12:12:12";
+		String strToken = "1213142323";
+		int gender = 1;
 		try {
 			Connection connection = _hikariDataSource.getConnection();
 			CallableStatement sqlProc = connection
-					.prepareCall("{?=call addUserSimple(?,?,?,?)}");
-			sqlProc.registerOutParameter(1, Types.INTEGER);
+					.prepareCall("{call create_user(?, ?, ?, ?, ?, ?, ?)}");
+			
+			
+			//sqlProc.registerOutParameter(1, Types.INTEGER);
+			sqlProc.setString(1, strFirstName);
 			sqlProc.setString(2, strEmail);
 			sqlProc.setString(3, strPassword);
-			sqlProc.setString(4, strFirstName);
-			sqlProc.setString(5, strLastName);
+			sqlProc.setString(4, strAddress);
+			sqlProc.setString(5, strDate);
+			sqlProc.setString(6, strToken);
+			sqlProc.setInt(7, gender);
 
 			sqlProc.execute();
 			sqlProc.close();
@@ -71,11 +79,12 @@ public class Dispatcher {
 			String strUserName, String strPassword) {
 
 		_hikariDataSource = new HikariDataSource();
-		_hikariDataSource.setJdbcUrl(
-				"jdbc:postgresql://" + strAddress + ":" + nPort + "/" + strDBName);
+		_hikariDataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		_hikariDataSource
+				.setJdbcUrl("jdbc:mysql://" + strAddress + ":" + nPort + "/" + strDBName);
 		_hikariDataSource.setUsername(strUserName);
 		_hikariDataSource.setPassword(strPassword);
-		// testHikari();
+		testHikari();
 	}
 
 	protected void loadCommands() throws Exception {
@@ -124,7 +133,7 @@ public class Dispatcher {
 	public void init() throws Exception {
 		loadSettings();
 		loadHikari(_htblConfig.get("dbHostName"), _htblConfig.get("dbPortNumber"),
-				_htblConfig.get("dbUserName"), _htblConfig.get("dbName"),
+				_htblConfig.get("dbName"), _htblConfig.get("dbUserName"),
 				_htblConfig.get("dbPassword"));
 		loadThreadPool();
 	}

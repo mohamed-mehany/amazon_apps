@@ -51,3 +51,4 @@ local.properties
 
 # Ignoring Config File
 config/settings.json
+/target/
