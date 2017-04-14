@@ -498,7 +498,7 @@ create procedure user_logout(IN t varchar(255), IN i int(11))
   begin
     declare logout bool;
     UPDATE user
-    SET token=''
+    SET token= null
     WHERE token=t and id = i;
         set logout = true;
         select logout;
