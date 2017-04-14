@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.eclipsesource.json.JsonObject;
 import commands.Command;
 
 public class GetProductRatingsCmd extends Command implements Runnable {
@@ -13,7 +14,7 @@ public class GetProductRatingsCmd extends Command implements Runnable {
 			throws Exception {
 
 		CallableStatement getRatings;
-		StringBuffer strbufResult = null, strbufResponseJSON;
+		StringBuffer strbufResult = new StringBuffer(""), strbufResponseJSON;
 		int product_id;
 		int nSQLResult;
 
@@ -21,19 +22,23 @@ public class GetProductRatingsCmd extends Command implements Runnable {
 
 		getRatings = connection.prepareCall("{call get_products_reviews" + "(?)" + "}");
 		getRatings.setInt(1, product_id);
+//		getRatings.execute();
 		ResultSet r = getRatings.executeQuery();
 		ResultSetMetaData rsmd = r.getMetaData();
 
 		int columnsNumber = rsmd.getColumnCount();
+
 		while (r.next()) {
+			JsonObject o = new JsonObject();
+
 			for (int i = 1; i <= columnsNumber; i++) {
-				if (i > 1) System.out.print(",  ");
-				String columnValue = r.getString(i);
-				System.out.print(columnValue + " " + rsmd.getColumnName(i));
+				o.add(rsmd.getColumnName(i), r.getString(i));
 			}
-			System.out.println("");
+
+			strbufResult.append(o);
 		}
-		strbufResult = makeJSONResponseEnvelope(200, null, null);
+
+		r.close();
 
 		getRatings.close();
 
