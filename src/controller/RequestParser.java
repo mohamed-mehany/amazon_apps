@@ -1,7 +1,16 @@
 package controller;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.boon.json.implementation.JsonStringDecoder;
+
+import com.eclipsesource.json.JsonObject;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.http.HttpContent;
+import io.netty.util.CharsetUtil;
 
 public class RequestParser implements Runnable {
 
@@ -16,17 +25,22 @@ public class RequestParser implements Runnable {
 	public void run() {
 		try {
 			// CALL DISPATCHER
+			HttpContent cc = (HttpContent) (_clientHandle._httpRequest);
+			ByteBuf content = cc.content();
+			JsonObject body = JsonObject.readFrom(content.toString(CharsetUtil.UTF_8));
+			JsonObject jsonData = body.get("data").asObject();
+			String command = body.get("command").asString();
+			String sessionID = body.get("sessionID").asString();
 			Map<String, Object> data = new HashMap<String, Object>();
-			data.put("email", "mohamead121212@m.com");
-			data.put("password", "johnpass");
-			data.put("firstName", "mohamed");
-			data.put("lastName", "mostafa");
-			data.put("address", "world");
-			data.put("date", "2012.01.01 12:12:12");
-			data.put("token", "1213132322");
-			data.put("gender", 1);
-
-			ClientRequest clientRequest = new ClientRequest("addUserSimple", "121", data);
+			data.put("email", jsonData.get("email").asString());
+			data.put("password", jsonData.get("password").asString());
+			data.put("firstName", jsonData.get("firstName").asString());
+			data.put("lastName", jsonData.get("lastName").asString());
+			data.put("address", jsonData.get("address").asString());
+			data.put("date", jsonData.get("date").asString());
+			data.put("token", jsonData.get("token").asString());
+			data.put("gender", jsonData.get("gender").asInt());
+			ClientRequest clientRequest = new ClientRequest(command, sessionID, data);
 			_parseListener.parsingFinished(_clientHandle, clientRequest);
 		} catch (Exception exp) {
 			_parseListener.parsingFailed(_clientHandle,
