@@ -40,7 +40,7 @@ public class EditProfileInfoCmd extends Command implements Runnable {
 		sqlProc.setString(3, strEmail);
 		sqlProc.setString(4, strAddress);
 		sqlProc.setString(5, strDateOfBirth);
-
+        sqlProc.execute();
 
 
 		//strbufResult =  String.valueOf(sqlProc.execute());
