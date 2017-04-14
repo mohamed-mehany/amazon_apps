@@ -27,7 +27,7 @@ public class LogoutCmd extends Command implements Runnable {
 		if (strToken == null || strToken.trim().length() == 0 || id == null)
 			return null;
 
-		sqlProc = connection.prepareCall("{?=call user_logout(?,?)}");
+		sqlProc = connection.prepareCall("{call user_logout(?,?)}");
 		sqlProc.setString(1, strToken);
 		sqlProc.setInt(2, id);
 		sqlProc.execute();
