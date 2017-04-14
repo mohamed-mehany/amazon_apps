@@ -2,5 +2,9 @@
 	"commands.user": {
 		"addUserSimple": "AddUserSimpleCmd",
 		"attemplogin": "AttemptLoginCmd"		
+	},
+	"commands.order": {
+		"viewUserOrders": "ViewUserOrdersCmd"
+	
 	}
 }
