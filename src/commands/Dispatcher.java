@@ -84,7 +84,7 @@ public class Dispatcher {
 				.setJdbcUrl("jdbc:mysql://" + strAddress + ":" + nPort + "/" + strDBName);
 		_hikariDataSource.setUsername(strUserName);
 		_hikariDataSource.setPassword(strPassword);
-		testHikari();
+		// testHikari();
 	}
 
 	protected void loadCommands() throws Exception {
