@@ -332,7 +332,7 @@ CREATE PROCEDURE view_delivered_orders
   )
     BEGIN
 
-      SELECT * FROM `order`WHERE delivery_status = 'DONE' AND  `order`.user_id = user_id;
+      SELECT * FROM `order`WHERE delivery_status = '2' AND  `order`.user_id = user_id;
 
     END
 

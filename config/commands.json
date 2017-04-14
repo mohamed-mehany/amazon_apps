@@ -5,7 +5,7 @@
 	},
 	"commands.order": {
 		"viewUserOrders": "ViewUserOrdersCmd",
-		"viewOrder": "ViewOrderCmd"
-	
+		"viewOrder": "ViewOrderCmd",
+		"viewDeliveredOrders": "ViewDeliveredOrdersCmd"
 	}
 }
