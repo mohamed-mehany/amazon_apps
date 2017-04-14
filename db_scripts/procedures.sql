@@ -36,6 +36,8 @@ DROP PROCEDURE IF EXISTS update_product;
 DROP PROCEDURE IF EXISTS view_price_products_cart;
 DROP PROCEDURE IF EXISTS all_products;
 
+DROP PROCEDURE IF EXISTS sort_products;
+
 
 DELIMITER //
 CREATE PROCEDURE `view_ratings_of_sellers_product` (IN product_id INT, IN seller_id INT)
@@ -307,6 +309,8 @@ CREATE PROCEDURE list_by_price_desc
 END
 //
 -- -- call list_by_price_desc();
+
+
 
 
 
@@ -623,7 +627,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE `mydb`.`view_price_products_cart` (IN product_id INT, IN quantity INT)
 BEGIN
-  DECLARE result DOUBLE;
+  -- --DECLARE result DOUBLE;
   SELECT (item.price)*quantity
     FROM product
     INNER JOIN item
@@ -650,3 +654,29 @@ end //
 DELIMITER ;
 
 -- --call mydb.all_products();
+
+
+
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`sort_products` (IN sorting_method int)
+   BEGIN
+  if sorting_method= 0
+    then
+      SELECT product.* , item.price FROM product
+        INNER JOIN item
+          ON item.product_id = product.id
+          ORDER BY item.price ASC;
+  else
+    SELECT product.* , item.price FROM product
+    INNER JOIN item
+    ON item.product_id = product.id
+    ORDER BY item.price DESC;
+  end if;
+   end//
+
+DELIMITER ;
+
+
+call mydb.sort_products(0);
+
