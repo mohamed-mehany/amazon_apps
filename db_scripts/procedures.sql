@@ -615,3 +615,65 @@ end //
 DELIMITER ;
 
 -- call mydb.filterItemsByFeature(1, NULL, 25);
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`get_user_reviews` (IN user_id INT)
+begin
+  SELECT * FROM rating r WHERE r.user_id = user_id;
+end //
+
+DELIMITER ;
+
+drop procedure if exists mydb.get_products_reviews;
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`get_products_reviews` (IN products_id INT)
+begin
+  SELECT * FROM rating r WHERE r.product_id = product_id;
+end //
+
+DELIMITER ;
+
+DROP procedure IF EXISTS mydb.create_review;
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`create_review`
+(IN value INT,
+IN user_id INT,
+IN product_id INT,
+IN review longtext)
+begin
+    INSERT INTO rating
+        ( value,
+          user_id,
+          product_id,
+          review,
+          create_time,
+          updated_at
+        )
+    VALUES
+        (
+         value,
+          user_id,
+          product_id,
+          review,
+          now(),
+          now()
+        );
+end //
+
+DROP procedure IF EXISTS my
+db.get_total_rating
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`get_total_rating` (IN products_id INT, OUT res INT)
+begin
+  SELECT AVG(value)
+  FROM rating r
+  WHERE r.product_id = product_id
+  into res;
+
+end //
+
+DELIMITER ;
+-- call mydb.filterItemsByFeature(1, NULL, 25);
