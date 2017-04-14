@@ -711,4 +711,3 @@ end //
 
 DELIMITER ;
 -- call mydb.filterItemsByFeature(1, NULL, 25);
->>>>>>> 59c9b53999b02a73f6d2aeda75eef354c7ca36f3
