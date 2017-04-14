@@ -33,6 +33,10 @@ DROP PROCEDURE IF EXISTS search_product;
 DROP PROCEDURE IF EXISTS update_product;
 
 
+DROP PROCEDURE IF EXISTS view_price_products_cart;
+DROP PROCEDURE IF EXISTS all_products;
+
+
 DELIMITER //
 CREATE PROCEDURE `view_ratings_of_sellers_product` (IN product_id INT, IN seller_id INT)
 BEGIN
@@ -615,3 +619,34 @@ end //
 DELIMITER ;
 
 -- call mydb.filterItemsByFeature(1, NULL, 25);
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`view_price_products_cart` (IN product_id INT, IN quantity INT)
+BEGIN
+  DECLARE result DOUBLE;
+  SELECT (item.price)*quantity
+    FROM product
+    INNER JOIN item
+    ON item.product_id = product.id
+    WHERE product.id= product_id;
+    -- --set res=result;
+end //
+
+DELIMITER ;
+
+-- --call mydb.view_price_products_cart(1, 2);
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`all_products` ()
+begin
+  SELECT product.name, item.price,item.colour,image.file
+    FROM product
+    INNER JOIN item
+    ON product.id=item.product_id
+    INNER JOIN image
+    ON item.id=image.item_id;
+end //
+
+DELIMITER ;
+
+-- --call mydb.all_products();
