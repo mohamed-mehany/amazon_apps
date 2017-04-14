@@ -2,5 +2,10 @@
 	"commands.user": {
 		"addUserSimple": "AddUserSimpleCmd",
 		"attemplogin": "AttemptLoginCmd"		
+	},
+	
+	"commands.message": {
+		"sendMessage": "SendMessageCmd",
+		"viewMessages": "ViewMessagesCmd"		
 	}
 }

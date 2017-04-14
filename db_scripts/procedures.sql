@@ -32,6 +32,9 @@ DROP PROCEDURE IF EXISTS search_vendor;
 DROP PROCEDURE IF EXISTS search_product;
 DROP PROCEDURE IF EXISTS update_product;
 
+DROP PROCEDURE IF EXISTS send_message;
+DROP PROCEDURE IF EXISTS view_messages;
+
 
 DELIMITER //
 CREATE PROCEDURE `view_ratings_of_sellers_product` (IN product_id INT, IN seller_id INT)
@@ -615,3 +618,36 @@ end //
 DELIMITER ;
 
 -- call mydb.filterItemsByFeature(1, NULL, 25);
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`send_message` (IN sender_id INT,IN receiver_id INT,IN text longtext )
+BEGIN
+  INSERT INTO message
+         (
+           text, 
+           created_at,
+           sender_id, 
+           receiver_id,
+           updated_at
+         )
+    VALUES 
+         (text,now(),sender_id, receiver_id,now());
+END //
+DELIMITER ;
+
+-- call send_message(1,2,'hello') ;
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`view_messages` (IN receiver_id INT)
+BEGIN
+   SELECT message.text , user.name 
+		FROM message
+        INNER JOIN user 
+			ON user.id = message.sender_id 
+     WHERE message.receiver_id = receiver_id; 
+END //
+DELIMITER ;
+
+-- call mydb.view_messages(2);
+
+
