@@ -4,7 +4,8 @@
 		"attemplogin": "AttemptLoginCmd"		
 	},
 	"commands.order": {
-		"viewUserOrders": "ViewUserOrdersCmd"
+		"viewUserOrders": "ViewUserOrdersCmd",
+		"viewOrder": "ViewOrderCmd"
 	
 	}
 }
