@@ -2,6 +2,7 @@ package controller;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.boon.json.implementation.JsonStringDecoder;
@@ -32,14 +33,16 @@ public class RequestParser implements Runnable {
 			String command = body.get("command").asString();
 			String sessionID = body.get("sessionID").asString();
 			Map<String, Object> data = new HashMap<String, Object>();
-			data.put("email", jsonData.get("email").asString());
-			data.put("password", jsonData.get("password").asString());
-			data.put("firstName", jsonData.get("firstName").asString());
-			data.put("lastName", jsonData.get("lastName").asString());
-			data.put("address", jsonData.get("address").asString());
-			data.put("date", jsonData.get("date").asString());
-			data.put("token", jsonData.get("token").asString());
-			data.put("gender", jsonData.get("gender").asInt());
+			Iterator<JsonObject.Member> temp = jsonData.iterator();
+			while(temp.hasNext()){
+				JsonObject.Member x = temp.next();
+				if (x.getValue().isNumber()){
+					data.put(x.getName(), x.getValue().asInt());
+
+				} else if (x.getValue().isString()) {
+					data.put(x.getName(), x.getValue().asString());
+				}
+			}
 			ClientRequest clientRequest = new ClientRequest(command, sessionID, data);
 			_parseListener.parsingFinished(_clientHandle, clientRequest);
 		} catch (Exception exp) {
