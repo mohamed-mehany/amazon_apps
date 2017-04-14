@@ -4,6 +4,7 @@
         "dbName": "DB_NAME",
         "dbUserName": "DB_UNAME",
         "dbPassword": "DB_PASS",
-        "dbPortNumber": "5432"
+        "dbPortNumber": "5432",
+	"dbHostName": "127.0.0.1"
     }
 }
