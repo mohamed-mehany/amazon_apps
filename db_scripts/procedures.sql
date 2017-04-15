@@ -417,7 +417,7 @@ DELIMITER //
  CREATE PROCEDURE `mydb`.`getItemInfo` (IN itemID INT)
  Begin
  SELECT
-      p.name, p.description, i.size, i.colour, i.price,   ( Select AVG(r.value)
+      p.name, p.description, i.size, i.colour, i.price, i.created_at, i.updated_at,   ( Select AVG(r.value)
 		FROM rating r
 		WHERE r.product_id = p.id) as rating
  FROM
