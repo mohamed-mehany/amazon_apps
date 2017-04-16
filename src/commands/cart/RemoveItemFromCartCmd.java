@@ -22,21 +22,10 @@ public class RemoveItemFromCartCmd extends Command implements Runnable {
 		int userID = (int) mapUserData.get("userID");
 		int itemID = (int) mapUserData.get("itemID");
 		MongoDatabase mongoDB = Dispatcher.getDataBase("Amazon");
-		MongoIterable<String> collections = mongoDB.listCollectionNames();
-		boolean found = false;
-		for (String s : collections)
-			if (s.equals("carts"))
-				found = true;
-		if (!found)
-			mongoDB.createCollection("carts");
+		Document cart = MongoDBUtils.getUserCart(mongoDB, userID);
 		MongoCollection<Document> carts = mongoDB.getCollection("carts");
-		Document cart = carts.find(eq("userID", userID)).first();
-		if (cart == null) {
-			cart = new Document("userID", userID).append("items", new ArrayList<Document>());
-			carts.insertOne(cart);
-		}
 		ArrayList<Document> items = (ArrayList<Document>) cart.get("items");
-		found = false;
+		boolean found = false;
 		Document item = null;
 		for (int i = 0; i < items.size(); i++)
 			if ((int) items.get(i).get("id") == itemID) {
