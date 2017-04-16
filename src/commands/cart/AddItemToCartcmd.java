@@ -53,8 +53,6 @@ public class AddItemToCartcmd extends Command implements Runnable {
 			if (!found)
 				mongoDB.createCollection("carts");
 			MongoCollection<Document> carts = mongoDB.getCollection("carts");
-			BasicDBObject query = new BasicDBObject();
-			query.put("userID", userID);
 			Document cart = carts.find(eq("userID", userID)).first();
 			if (cart == null) {
 				cart = new Document("userID", userID).append("items", new ArrayList<Document>());
