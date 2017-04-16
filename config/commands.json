@@ -1,11 +1,19 @@
 {
 	"commands.user": {
 		"addUserSimple": "AddUserSimpleCmd",
-		"attemplogin": "AttemptLoginCmd"		
+		"attemplogin": "AttemptLoginCmd"
 	},
-	
+
 	"commands.message": {
 		"sendMessage": "SendMessageCmd",
-		"viewMessages": "ViewMessagesCmd"		
-	}
+		"viewMessages": "ViewMessagesCmd"
+	},
+
+    "commands.review": {
+        "createRating": "CreateRatingCmd",
+        "CreateValueOnlyRating": "CreateValueOnlyRatingCmd",
+        "GetProductRatings":"GetProductRatingsCmd",
+        "GetTotalRating":"GetTotalRatingCmd",
+        "GetUserRating":"GetUserRatingsCmd"
+    }
 }

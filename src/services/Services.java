@@ -1,8 +1,11 @@
 package services;
 
+import commands.Receiver;
 import controller.Controller;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -11,13 +14,15 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
+import java.nio.channels.SocketChannel;
+
 public final class Services {
 
 	public static final boolean SSL = System.getProperty("ssl") != null;
-	public static final int PORT = Integer.parseInt(SSL ? "8080" : "8080");
+	public static final int PORT = Integer.parseInt(SSL ? "3030" : "3030");
 
 	protected static Controller _controller;
-
+	protected static Channel channel;
 	public static void main(String[] args) throws Exception {
 
 		// Configure SSL.
@@ -44,13 +49,30 @@ public final class Services {
 			serverBoot.channel(NioServerSocketChannel.class);
 			serverBoot.handler(new LoggingHandler(LogLevel.TRACE));
 			serverBoot.childHandler(new ServicesInitializer(sslCtx, _controller));
-			Channel channel = serverBoot.bind(PORT).sync().channel();
+
+
+
+			channel = serverBoot.bind(PORT).sync().channel();
+			runReceivers();
 			System.err.println("Services running on  " + (SSL ? "https" : "http")
 					+ "://127.0.0.1:" + PORT + '/');
 			channel.closeFuture().sync();
+
 		} finally {
 			bossGroup.shutdownGracefully();
 			workerGroup.shutdownGracefully();
 		}
+	}
+	public static void runReceivers() throws Exception{
+		Receiver createRatingReceiver = new Receiver("Ratings", "localhost", "EXCHANGE_SERVER1");
+		createRatingReceiver.Receive();
+
+
+		Receiver sendMessageReceiver = new Receiver("Messages", "localhost", "EXCHANGE_SERVER1");
+		sendMessageReceiver.Receive();
+
+		Receiver addUserSimple = new Receiver("Users", "localhost", "EXCHANGE_SERVER1");
+		addUserSimple.Receive();
+
 	}
 }
