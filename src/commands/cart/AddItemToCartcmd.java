@@ -64,7 +64,7 @@ public class AddItemToCartcmd extends Command implements Runnable {
 				carts.updateOne(eq("userID", userID),
 						new Document("$set", new Document("totalPrice", totalPrice + itemPrice)));
 			}
-			return makeJSONResponseEnvelope(200, null, null);
+			return makeJSONResponseEnvelope(200, null, new StringBuffer(cart.toJson()));
 		}
 		return makeJSONResponseEnvelope(404, null, new StringBuffer("{\"error\":\"ItemNotFound\"}"));
 	}
