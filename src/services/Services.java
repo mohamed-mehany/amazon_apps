@@ -49,9 +49,6 @@ public final class Services {
 			serverBoot.channel(NioServerSocketChannel.class);
 			serverBoot.handler(new LoggingHandler(LogLevel.TRACE));
 			serverBoot.childHandler(new ServicesInitializer(sslCtx, _controller));
-
-
-
 			channel = serverBoot.bind(PORT).sync().channel();
 			runReceivers();
 			System.err.println("Services running on  " + (SSL ? "https" : "http")
@@ -64,15 +61,15 @@ public final class Services {
 		}
 	}
 	public static void runReceivers() throws Exception{
-		Receiver createRatingReceiver = new Receiver("Ratings", "localhost", "EXCHANGE_SERVER1");
-		createRatingReceiver.Receive();
+		Receiver RatingsReceiver = new Receiver("Ratings", "localhost", "EXCHANGE_SERVER1");
+		RatingsReceiver.Receive();
 
 
-		Receiver sendMessageReceiver = new Receiver("Messages", "localhost", "EXCHANGE_SERVER1");
-		sendMessageReceiver.Receive();
+		Receiver MessagesReceiver = new Receiver("Messages", "localhost", "EXCHANGE_SERVER1");
+		MessagesReceiver.Receive();
 
-		Receiver addUserSimple = new Receiver("Users", "localhost", "EXCHANGE_SERVER1");
-		addUserSimple.Receive();
+		Receiver UsersReceiver = new Receiver("Users", "localhost", "EXCHANGE_SERVER1");
+		UsersReceiver.Receive();
 
 	}
 }

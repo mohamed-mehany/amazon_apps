@@ -7,14 +7,11 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import services.ServicesHandler;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 public class Receiver {
@@ -94,7 +91,7 @@ public class Receiver {
 						+ "':'" + message + "'");
 //				messageReceived = message;
 //				JsonObject json = JsonObject.readFrom(message);
-				writeJSON(message);
+				sendToNetty(message);
 
 
 			}
@@ -109,8 +106,8 @@ public class Receiver {
 	}
 
 
-	public void writeJSON(String message){
-		HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
+	public void sendToNetty(String message){
+		HttpClient httpClient = HttpClientBuilder.create().build();
 		try {
 
 			HttpPost request = new HttpPost("http://localhost:3030");
