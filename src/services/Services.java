@@ -15,6 +15,8 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
 import java.nio.channels.SocketChannel;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public final class Services {
 
@@ -60,16 +62,31 @@ public final class Services {
 			workerGroup.shutdownGracefully();
 		}
 	}
+	static class SayHello extends TimerTask
+
+	{
+		String tag, ip, key;
+		Receiver receive = null;
+
+		public SayHello(String tag, String ip, String key){
+			this.tag = tag;
+			this.ip = ip;
+			this.key = key;
+		}
+		public void run() {
+			receive = new Receiver(tag, ip, key);
+			receive.Receive();
+		}
+
+	}
+
 	public static void runReceivers() throws Exception{
-		Receiver RatingsReceiver = new Receiver("Ratings", "localhost", "EXCHANGE_SERVER1");
-		RatingsReceiver.Receive();
-
-
-		Receiver MessagesReceiver = new Receiver("Messages", "localhost", "EXCHANGE_SERVER1");
-		MessagesReceiver.Receive();
-
-		Receiver UsersReceiver = new Receiver("Users", "localhost", "EXCHANGE_SERVER1");
-		UsersReceiver.Receive();
+		Timer timerRatings = new Timer();
+		timerRatings.schedule(new SayHello("Ratings", "192.168.1.144", "EXCHANGE_SERVER1"), 0, 500);
+		Timer timerMessages = new Timer();
+		timerMessages.schedule(new SayHello("Messages", "192.168.1.144", "EXCHANGE_SERVER1"), 0, 500);
+		Timer timerUsers = new Timer();
+		timerUsers.schedule(new SayHello("Users", "192.168.1.144", "EXCHANGE_SERVER1"), 0, 500);
 
 	}
 }

@@ -1,20 +1,36 @@
 package commands;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeoutException;
 
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
-
 public class Receiver {
+
+	static class SayHello extends TimerTask {
+		Receiver receive =  null;
+		public void run() {
+
+			receive = new Receiver("mohsen", "192.168.1.144",
+					"EXCHANGE_SERVER1");
+			receive.Receive();
+		}
+	}
 
 	String tag;
 	String exchange_name;
@@ -22,14 +38,12 @@ public class Receiver {
 	Channel channel = null;
 	Connection connection;
 	String queueName;
-	boolean received;
-	String messageReceived;
-
+	ConnectionFactory factory;
 	public Receiver(String tag, String ip, String key) {
 		this.tag = tag;
 		server_ip = ip;
 		getExchange(key);
-		}
+	}
 
 	public void getExchange(String key) {
 		BufferedReader Br = null;
@@ -55,57 +69,56 @@ public class Receiver {
 	}
 
 	public void connect() {
-		ConnectionFactory factory = new ConnectionFactory();
+		 factory = new ConnectionFactory();
 		factory.setHost(server_ip);
 		factory.setUsername("user");
 		factory.setPassword("password");
-//		factory.setHost("");
+		// factory.setHost("");
 
-		try {
-			connection = factory.newConnection();
-			channel = connection.createChannel();
-			channel.exchangeDeclare(exchange_name, "direct");
-			queueName = channel.queueDeclare(tag, false, false, false, null).getQueue();
-			channel.queueBind(queueName, exchange_name, tag);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	public void Receive() throws java.net.URISyntaxException, java.lang.InterruptedException{
-		System.out.println("connecting ..." + tag );
-		connect();
-		System.out.println("Waiting for messages....");
-		Consumer consumer = new DefaultConsumer(channel) {
-			@Override
-			public void handleDelivery(String consumerTag, Envelope envelope,
-									   AMQP.BasicProperties properties, byte[] body)
-					throws IOException {
-				String message = new String(body, "UTF-8");
-				System.out.println(" [x] Received '" + envelope.getRoutingKey()
-						+ "':'" + message + "'");
-//				messageReceived = message;
-//				JsonObject json = JsonObject.readFrom(message);
-				sendToNetty(message);
-
-
+			try {
+				connection = factory.newConnection();
+				channel = connection.createChannel();
+				channel.exchangeDeclare(exchange_name, "direct");
+				queueName = channel.queueDeclare(tag, false, false, false, null)
+						.getQueue();
+				channel.queueBind(queueName, exchange_name, tag);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TimeoutException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		};
-		try {
-			channel.basicConsume(queueName, true, consumer);
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
 
+	public void Receive() {
+		connect();
+		{
 
+
+//			System.out.println("connecting ... 22");
+//			System.out.println("Waiting for messages....");
+			Consumer consumer = new DefaultConsumer(channel) {
+				@Override
+				public void handleDelivery(String consumerTag,
+										   Envelope envelope, AMQP.BasicProperties properties,
+										   byte[] body) throws IOException {
+					String message = new String(body, "UTF-8");
+					System.out.println(" [x] Received '"
+							+ envelope.getRoutingKey() + "':'" + message + "'");
+				sendToNetty(message);
+				}
+			};
+			try {
+				channel.basicConsume(queueName, true, consumer);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 	public void sendToNetty(String message){
 		HttpClient httpClient = HttpClientBuilder.create().build();
 		try {
@@ -122,6 +135,11 @@ public class Receiver {
 			System.out.println("Success! Sent to Netty.");
 		}
 	}
-
-
+//	public static void main(String[] argv) throws Exception {
+//		Timer timer = new Timer();
+//		timer.schedule(new SayHello(), 0, 500);
+//		System.out.println("STARTING ");
+//
+//
+//	}
 }
