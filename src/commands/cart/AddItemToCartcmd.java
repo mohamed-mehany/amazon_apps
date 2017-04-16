@@ -20,7 +20,6 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import static com.mongodb.client.model.Filters.eq;
 
-
 import commands.Command;
 import commands.Dispatcher;
 
@@ -55,17 +54,28 @@ public class AddItemToCartcmd extends Command implements Runnable {
 			MongoCollection<Document> carts = mongoDB.getCollection("carts");
 			Document cart = carts.find(eq("userID", userID)).first();
 			if (cart == null) {
-				cart = new Document("userID", userID).append("items", new ArrayList<Document>());
+				cart = new Document("userID", userID).append("items", new ArrayList<Document>()).append("totalPrice",
+						0.0);
 				carts.insertOne(cart);
 			}
-			Document addedItem = new Document("id", itemID).append("size", itemSize)
-					.append("stock", itemStock).append("colour", itemColour).append("price", itemPrice)
-					.append("product_id", itemProductID).append("created_at", itemCreatedAt)
-					.append("updated_at", itemUpdatedAt);
 			ArrayList<Document> items = (ArrayList<Document>) cart.get("items");
-			items.add(addedItem);
-			cart.put("items", items);
-			carts.updateOne(eq("userID", userID), new Document("$set", new Document("items", items)));
+			found = false;
+			for (int i = 0; i < items.size(); i++)
+				if ((int) items.get(i).get("id") == itemID) {
+					found = true;
+					break;
+				}
+			if (!found) {
+				Document addedItem = new Document("id", itemID).append("size", itemSize).append("stock", itemStock)
+						.append("colour", itemColour).append("price", itemPrice).append("product_id", itemProductID)
+						.append("created_at", itemCreatedAt).append("updated_at", itemUpdatedAt).append("quantity", 1);
+				items.add(addedItem);
+				cart.put("items", items);
+				double totalPrice = (double) cart.get("totalPrice");
+				carts.updateOne(eq("userID", userID), new Document("$set", new Document("items", items)));
+				carts.updateOne(eq("userID", userID),
+						new Document("$set", new Document("totalPrice", totalPrice + itemPrice)));
+			}
 			return makeJSONResponseEnvelope(200, null, null);
 		}
 		return makeJSONResponseEnvelope(404, null, new StringBuffer("{\"error\":\"ItemNotFound\"}"));

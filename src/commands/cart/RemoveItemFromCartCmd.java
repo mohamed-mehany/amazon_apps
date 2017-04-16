@@ -37,15 +37,19 @@ public class RemoveItemFromCartCmd extends Command implements Runnable {
 		}
 		ArrayList<Document> items = (ArrayList<Document>) cart.get("items");
 		found = false;
+		Document item = null;
 		for (int i = 0; i < items.size(); i++)
 			if ((int) items.get(i).get("id") == itemID) {
-				items.remove(i);
+				item = items.remove(i);
 				found = true;
-				i--;
+				break;
 			}
 		carts.updateOne(eq("userID", userID), new Document("$set", new Document("items", items)));
-		if (found)
+		if (found) {
+			double totalPrice = (double) cart.get("totalPrice");
+			carts.updateOne(eq("userID", userID), new Document("$set", new Document("totalPrice", totalPrice + (double) item.get("price"))));
 			return makeJSONResponseEnvelope(200, null, null);
+		}
 		else
 			return makeJSONResponseEnvelope(404, null, new StringBuffer("{\"error\":\"ItemNotFound\"}"));
 	}
