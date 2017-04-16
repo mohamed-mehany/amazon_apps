@@ -18,6 +18,8 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
+import static com.mongodb.client.model.Filters.eq;
+
 
 import commands.Command;
 import commands.Dispatcher;
@@ -26,13 +28,7 @@ public class AddItemToCartcmd extends Command implements Runnable {
 
 	@Override
 	public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
-		String userToken = (String) mapUserData.get("authorization"); // not
-																		// sure
-																		// if
-																		// this
-																		// is
-																		// it's
-																		// name
+		int userID = (int) mapUserData.get("userID");
 		int itemID = (int) mapUserData.get("itemID");
 
 		CallableStatement getItem = connection.prepareCall("{call getItemInfo(?)}");
@@ -56,27 +52,25 @@ public class AddItemToCartcmd extends Command implements Runnable {
 					found = true;
 			if (!found)
 				mongoDB.createCollection("carts");
-			DBCollection carts = (DBCollection) mongoDB.getCollection("carts");
+			MongoCollection<Document> carts = mongoDB.getCollection("carts");
 			BasicDBObject query = new BasicDBObject();
-			query.put("userToken", userToken);
-			DBCursor cursor = carts.find(query);
-			DBObject cart;
-			if (!cursor.hasNext()) {
-				cart = new BasicDBObject("userToken", userToken).append("items", new ArrayList<DBObject>());
-				carts.insert(cart);
+			query.put("userID", userID);
+			Document cart = carts.find(eq("userID", userID)).first();
+			if (cart == null) {
+				cart = new Document("userID", userID).append("items", new ArrayList<Document>());
+				carts.insertOne(cart);
 			}
-			cursor = carts.find(query);
-			cart = (DBObject) cursor.next();
-			DBObject addedItem = new BasicDBObject("id", itemID).append("size", itemSize)
+			Document addedItem = new Document("id", itemID).append("size", itemSize)
 					.append("stock", itemStock).append("colour", itemColour).append("price", itemPrice)
 					.append("product_id", itemProductID).append("created_at", itemCreatedAt)
 					.append("updated_at", itemUpdatedAt);
-			ArrayList<DBObject> items = (ArrayList<DBObject>) cart.get("items");
+			ArrayList<Document> items = (ArrayList<Document>) cart.get("items");
 			items.add(addedItem);
 			cart.put("items", items);
-			carts.updateMulti(query, cart);
+			carts.updateOne(eq("userID", userID), new Document("$set", new Document("items", items)));
+			return makeJSONResponseEnvelope(200, null, null);
 		}
-		return makeJSONResponseEnvelope(200, null, null);
+		return makeJSONResponseEnvelope(404, null, new StringBuffer("{\"error\":\"ItemNotFound\"}"));
 	}
 
 }
