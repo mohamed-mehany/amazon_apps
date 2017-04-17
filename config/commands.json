@@ -1,6 +1,9 @@
 {
 	"commands.user": {
 		"addUserSimple": "AddUserSimpleCmd",
-		"attemplogin": "AttemptLoginCmd"		
+		"attemplogin": "AttemptLoginCmd"
+	},
+	"commands.order": {
+		"searchOrderByItemNameCmd": "SearchOrderByItemNameCmd"	
 	}
 }

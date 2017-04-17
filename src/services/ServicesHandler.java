@@ -63,7 +63,6 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 		return false;
 	}
 
-	@Override
 	protected void messageReceived(ChannelHandlerContext ctx, Object msg) {
 
 		System.err.println(" got a request: " + msg);
@@ -138,5 +137,11 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
 		cause.printStackTrace();
 		ctx.close();
+	}
+
+	@Override
+	protected void channelRead0(ChannelHandlerContext arg0, Object arg1) throws Exception {
+		messageReceived(arg0, arg1);
+		
 	}
 }

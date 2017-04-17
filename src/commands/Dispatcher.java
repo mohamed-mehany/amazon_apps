@@ -2,6 +2,7 @@ package commands;
 
 import java.io.FileReader;
 import java.lang.reflect.Constructor;
+import java.net.UnknownHostException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import controller.ClientHandle;
 import controller.ClientRequest;
+import elasticsearch.ElasticSearch;
 
 public class Dispatcher {
 
@@ -27,6 +29,7 @@ public class Dispatcher {
 	protected Hashtable<String, String> _htblConfig;
 	protected ExecutorService _threadPoolCmds;
 	protected HikariDataSource _hikariDataSource;
+	public ElasticSearch _elasticSearchClient;
 
 	public Dispatcher() {
 	}
@@ -81,9 +84,9 @@ public class Dispatcher {
 		_hikariDataSource = new HikariDataSource();
 		_hikariDataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		_hikariDataSource
-				.setJdbcUrl("jdbc:mysql://" + strAddress + ":" + nPort + "/" + strDBName);
-		_hikariDataSource.setUsername(strUserName);
-		_hikariDataSource.setPassword(strPassword);
+				.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/mydb");
+		_hikariDataSource.setUsername("root");
+		_hikariDataSource.setPassword("");
 		// testHikari();
 	}
 
@@ -120,14 +123,32 @@ public class Dispatcher {
 		}
 
 	}
+	
+	protected void loadElasticConfig() throws Exception {
+		_htblConfig = new Hashtable<String, String>();
+		JsonObject commands = JsonObject.readFrom(new FileReader("config/settings.json"))
+				.get("elasticConfig").asObject();
+		Iterator<Member> it = commands.iterator();
+		while (it.hasNext()) {
+			Member member = it.next();
+			_htblConfig.put(member.getName(), member.getValue().asString());
+		}
+
+	}
 
 	protected void loadSettings() throws Exception {
 		loadDBConfig();
 		loadCommands();
+		loadElasticConfig();
 	}
 
 	protected void loadThreadPool() {
 		_threadPoolCmds = Executors.newFixedThreadPool(20);
+	}
+	
+	public void loadElasticSearch() throws UnknownHostException {
+		ElasticSearch.loadConf(_htblConfig.get("elasticClusterName"), _htblConfig.get("elasticHost"), Integer.parseInt(_htblConfig.get("elasticPort")));
+		_elasticSearchClient = ElasticSearch.getInstance();
 	}
 
 	public void init() throws Exception {
@@ -135,6 +156,7 @@ public class Dispatcher {
 		loadHikari(_htblConfig.get("dbHostName"), _htblConfig.get("dbPortNumber"),
 				_htblConfig.get("dbName"), _htblConfig.get("dbUserName"),
 				_htblConfig.get("dbPassword"));
+		loadElasticSearch();
 		loadThreadPool();
 	}
 }
