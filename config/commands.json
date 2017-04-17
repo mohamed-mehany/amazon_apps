@@ -11,9 +11,9 @@
 
     "commands.review": {
         "createRating": "CreateRatingCmd",
-        "CreateValueOnlyRating": "CreateValueOnlyRatingCmd",
-        "GetProductRatings":"GetProductRatingsCmd",
-        "GetTotalRating":"GetTotalRatingCmd",
-        "GetUserRating":"GetUserRatingsCmd"
+        "createValueOnlyRating": "CreateValueOnlyRatingCmd",
+        "getProductRatings":"GetProductRatingsCmd",
+        "getTotalRating":"GetTotalRatingCmd",
+        "getUserRating":"GetUserRatingsCmd"
     }
 }
