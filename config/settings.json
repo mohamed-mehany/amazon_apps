@@ -1,13 +1,13 @@
-	{
-	"allowedCommands": ["commands.user", "commands.cart"],
+{
+	"allowedCommands": ["commands.message", "commands.cart"],
     "dbConfig": {
-        "dbName": "DB_NAME",
-        "dbUserName": "DB_UNAME",
-        "dbPassword": "DB_PASS",
-        "dbPortNumber": "5432",
-        "dbHostName": "localhost",
+        "dbName": "mydb",
+        "dbUserName": "root",
+        "dbPassword": "[yahbal]",
+        "dbPortNumber": "3306",
+        "dbHostName": "127.0.0.1",
         "mongoDBName": "Amazon",
-        "mongoUser": "amazonUSer",
+        "mongoUser": "amazonUser",
         "mongoPassword": "123456",
        	"mongoPort": "27017"
     }

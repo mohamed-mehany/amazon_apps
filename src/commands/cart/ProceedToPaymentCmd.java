@@ -24,6 +24,7 @@ public class ProceedToPaymentCmd extends Command implements Runnable {
 			Document cart = MongoDBUtils.getUserCart(mongoDB, userID);
 			MongoCollection<Document> carts = mongoDB.getCollection("carts");
 			carts.deleteMany(eq("userID", userID));
+			cart = MongoDBUtils.getUserCart(mongoDB, userID);
 			return makeJSONResponseEnvelope(200, null, new StringBuffer(cart.toJson()));
 		}
 		return makeJSONResponseEnvelope(404, null, new StringBuffer("{\"error\":\"creditCardNotFound\"}"));

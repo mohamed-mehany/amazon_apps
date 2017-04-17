@@ -23,10 +23,11 @@ import static com.mongodb.client.model.Filters.eq;
 import commands.Command;
 import commands.Dispatcher;
 
-public class AddItemToCartcmd extends Command implements Runnable {
+public class AddItemToCartCmd extends Command implements Runnable {
 
 	@Override
 	public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
+		
 		int userID = (int) mapUserData.get("userID");
 		int itemID = (int) mapUserData.get("itemID");
 
@@ -64,6 +65,7 @@ public class AddItemToCartcmd extends Command implements Runnable {
 				carts.updateOne(eq("userID", userID),
 						new Document("$set", new Document("totalPrice", totalPrice + itemPrice)));
 			}
+			cart = MongoDBUtils.getUserCart(mongoDB, userID);
 			return makeJSONResponseEnvelope(200, null, new StringBuffer(cart.toJson()));
 		}
 		return makeJSONResponseEnvelope(404, null, new StringBuffer("{\"error\":\"ItemNotFound\"}"));

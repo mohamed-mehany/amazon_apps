@@ -36,7 +36,8 @@ public class RemoveItemFromCartCmd extends Command implements Runnable {
 		carts.updateOne(eq("userID", userID), new Document("$set", new Document("items", items)));
 		if (found) {
 			double totalPrice = (double) cart.get("totalPrice");
-			carts.updateOne(eq("userID", userID), new Document("$set", new Document("totalPrice", totalPrice + (double) item.get("price"))));
+			carts.updateOne(eq("userID", userID), new Document("$set", new Document("totalPrice", totalPrice - ((double) item.get("price") * (int) item.get("quantity")))));
+			cart = MongoDBUtils.getUserCart(mongoDB, userID);
 			return makeJSONResponseEnvelope(200, null, new StringBuffer(cart.toJson()));
 		}
 		else

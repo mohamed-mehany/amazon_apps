@@ -17,15 +17,20 @@ public class SendMessageCmd extends Command implements Runnable {
 		int senderID, receiverID;
 		String message;
 		
+		System.out.println("entered command");
+		
 		senderID =  ((Integer) mapUserData.get("sender_id"));
 		receiverID = ((Integer) mapUserData.get("receiver_id"));
 		message = ((String) mapUserData.get("text"));
+		
+		System.out.println(senderID + " " + receiverID + " " + message);
 		
 		sqlProc = connection.prepareCall("{call send_message(?,?,?)}");
 		sqlProc.setInt(1, senderID);
 		sqlProc.setInt(2, receiverID);
 		sqlProc.setString(3, message);
 		sqlProc.execute();
+		System.out.println("procedure executed");
 		strbufResult = makeJSONResponseEnvelope(3, null, null);
 		sqlProc.close();
 		return strbufResult;

@@ -39,6 +39,12 @@ public class ChangeItemQuantityCmd extends Command implements Runnable {
 		items.add(item);
 		carts.updateOne(eq("userID", userID), new Document("$set", new Document("items", items)));
 		cart = MongoDBUtils.getUserCart(mongoDB, userID);
+		items = (ArrayList<Document>) cart.get("items");
+		double newTotalPrice = 0;
+		for (Document itm : items)
+			newTotalPrice += (double) itm.get("price") * (int) itm.get("quantity");
+		carts.updateOne(eq("userID", userID), new Document("$set", new Document("totalPrice", newTotalPrice)));
+		cart = MongoDBUtils.getUserCart(mongoDB, userID);
 		return makeJSONResponseEnvelope(200, null, new StringBuffer(cart.toJson()));
 	}
 

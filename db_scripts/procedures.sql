@@ -39,7 +39,7 @@ DROP PROCEDURE IF EXISTS view_messages;
 DELIMITER //
 CREATE PROCEDURE `view_ratings_of_sellers_product` (IN product_id INT, IN seller_id INT)
 BEGIN
-  SELECT rating.value, user.name, rating.create_time
+  SELECT rating.value, user.name, rating.created_at
     FROM rating
     INNER JOIN product
     ON rating.product_id = product.id
@@ -132,7 +132,7 @@ DELIMITER //
 CREATE PROCEDURE add_product
   (
     IN name varchar(63),
-    IN vendor_id1 INT,
+    IN vendor_id INT,
     IN description varchar(63),
     IN department_id int,
     IN size int,
@@ -147,15 +147,15 @@ CREATE PROCEDURE add_product
       (
         name,
         description,
-        create_time,
-        vendor_id1
+        created_at,
+        vendor_id
       )
         VALUES
         (
           name,
           description,
           now(),
-          vendor_id1
+          vendor_id
         );
 
     SELECT @prod_id:= product.id FROM product
@@ -166,7 +166,7 @@ CREATE PROCEDURE add_product
           stock,
           colour,
           price,
-          create_time,
+          created_at,
           product_id
         )
     VALUES
@@ -195,10 +195,10 @@ CREATE PROCEDURE add_product
    INSERT INTO image
       (
         file_path,
-        create_time,
+        created_at,
         item_id,
         item_product_id,
-        item_product_vendor_id1,
+        item_product_vendor_id,
         user_id
       )
     VALUES
@@ -207,8 +207,8 @@ CREATE PROCEDURE add_product
         now(),
         @it_id,
         @prod_id,
-        vendor_id1,
-        vendor_id1
+        vendor_id,
+        vendor_id
       );
 END
 //
@@ -367,7 +367,7 @@ BEGIN
            value                  ,
            user_id               ,
            product_id          ,
-           create_time
+           created_at
          )
     VALUES
          (ratingValue, userId, productId, now());
@@ -417,9 +417,9 @@ DELIMITER //
  CREATE PROCEDURE `mydb`.`getItemInfo` (IN itemID INT)
  Begin
  SELECT
-      p.name, p.description, i.size, i.colour, i.price, i.created_at, i.updated_at,   ( Select AVG(r.value)
-		FROM rating r
-		WHERE r.product_id = p.id) as rating
+      p.name, p.description, i.size, i.stock,  i.colour, i.price, i.created_at, i.updated_at, i.product_id , ( Select AVG(r.value)
+    FROM rating r
+    WHERE r.product_id = p.id) as rating
  FROM
    item i, product p
 where i.product_id = itemID and p.id = itemID;
@@ -514,67 +514,67 @@ DELIMITER //
  Begin
  if(item_color is NULL and item_size is NULL)
  then
-	 SELECT
-		  p.name, p.description, i.size, i.colour, i.price
-	 FROM
-	   item i, product p
-	where i.product_id = itemID and p.id = itemID;
+   SELECT
+      p.name, p.description, i.size, i.colour, i.price
+   FROM
+     item i, product p
+  where i.product_id = itemID and p.id = itemID;
 elseif (item_color is NULL)
 then
  SELECT
-		  p.name, p.description, i.size, i.colour, i.price
-	 FROM
-	   item i, product p
-	where i.product_id = itemID and p.id = itemID and i.size = item_size;
+      p.name, p.description, i.size, i.colour, i.price
+   FROM
+     item i, product p
+  where i.product_id = itemID and p.id = itemID and i.size = item_size;
 elseif(item_size is NULL)
 then
 SELECT
-		  p.name, p.description, i.size, i.colour, i.price
-	 FROM
-	   item i, product p
-	where i.product_id = itemID and p.id = itemID and i.colour = item_color;
+      p.name, p.description, i.size, i.colour, i.price
+   FROM
+     item i, product p
+  where i.product_id = itemID and p.id = itemID and i.colour = item_color;
 end if;
  END //
  DELIMITER ;
 
  DELIMITER //
-	CREATE PROCEDURE `mydb`.`update_product`(
-	 n_id int,
-	 n_name varchar(63),
-	 n_desc varchar(255),
-	 n_v_id int
-	)
-	BEGIN
-		UPDATE product
-		SET
-	         name = n_name,
-	         description = n_desc,
-	         vendor_id1 = n_v_id
-		WHERE
-		id = n_id;
-	END //
-	DELIMITER ;
+  CREATE PROCEDURE `mydb`.`update_product`(
+   n_id int,
+   n_name varchar(63),
+   n_desc varchar(255),
+   n_v_id int
+  )
+  BEGIN
+    UPDATE product
+    SET
+           name = n_name,
+           description = n_desc,
+           vendor_id1 = n_v_id
+    WHERE
+    id = n_id;
+  END //
+  DELIMITER ;
 
 DELIMITER //
-	CREATE PROCEDURE `mydb`.`view_user`(
-	 n_id int
-	)
-	BEGIN
-	 select * from user where id = n_id;
-	END //
-	DELIMITER ;
+  CREATE PROCEDURE `mydb`.`view_user`(
+   n_id int
+  )
+  BEGIN
+   select * from user where id = n_id;
+  END //
+  DELIMITER ;
 
 DELIMITER //
-	CREATE PROCEDURE `mydb`.`view_product_rating`(
-	u_id int,
+  CREATE PROCEDURE `mydb`.`view_product_rating`(
+  u_id int,
     p_id int
-	)
-	BEGIN
-		select value
-		from rating inner join product on rating.product_id = product.id
-		where product.vendor_id1 = u_id
-	    and product.id = p_id;
-	END //
+  )
+  BEGIN
+    select value
+    from rating inner join product on rating.product_id = product.id
+    where product.vendor_id1 = u_id
+      and product.id = p_id;
+  END //
  DELIMITER ;
 
 DELIMITER //
@@ -641,9 +641,9 @@ DELIMITER //
 CREATE PROCEDURE `mydb`.`view_messages` (IN receiver_id INT)
 BEGIN
    SELECT message.text , user.name 
-		FROM message
+    FROM message
         INNER JOIN user 
-			ON user.id = message.sender_id 
+      ON user.id = message.sender_id 
      WHERE message.receiver_id = receiver_id; 
 END //
 DELIMITER ;
@@ -682,7 +682,7 @@ begin
           user_id,
           product_id,
           review,
-          create_time,
+          created_at,
           updated_at
         )
     VALUES
@@ -711,3 +711,9 @@ end //
 
 DELIMITER ;
 -- call mydb.filterItemsByFeature(1, NULL, 25);
+
+
+
+
+
+13:40:04  -- call mydb.view_messages(2);   CREATE PROCEDURE `mydb`.`get_user_reviews` (IN user_id INT) begin   SELECT * FROM rating r WHERE r.user_id = user_id Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 6  0.00032 sec

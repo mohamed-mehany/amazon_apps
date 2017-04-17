@@ -38,8 +38,8 @@ public class Dispatcher {
 	public Dispatcher() {
 	}
 
-	public void dispatchRequest(ClientHandle clientHandle, ClientRequest clientRequest) throws Exception {
-
+	public void dispatchRequest(ClientHandle clientHandle, ClientRequest clientRequest)
+			throws Exception {
 		Command cmd;
 		String strAction;
 		strAction = clientRequest.getAction();
@@ -81,8 +81,8 @@ public class Dispatcher {
 		}
 	}
 
-	protected void loadHikari(String strAddress, String nPort, String strDBName, String strUserName,
-			String strPassword) {
+	protected void loadHikari(String strAddress, String nPort, String strDBName,
+			String strUserName, String strPassword) {
 
 		_hikariDataSource = new HikariDataSource();
 		_hikariDataSource.setDriverClassName("com.mysql.jdbc.Driver");
@@ -96,7 +96,8 @@ public class Dispatcher {
 	protected void loadCommands() throws Exception {
 		_htblCommands = new Hashtable<String, Class<?>>();
 		String strActionName, strClassName, strPackageName;
-		JsonArray allowedCommands = JsonObject.readFrom(new FileReader("config/settings.json")).get("allowedCommands")
+		JsonArray allowedCommands = JsonObject
+				.readFrom(new FileReader("config/settings.json")).get("allowedCommands")
 				.asArray();
 		JsonObject commands = JsonObject.readFrom(new FileReader("config/commands.json"));
 		Iterator<JsonValue> it = allowedCommands.iterator();
@@ -116,7 +117,8 @@ public class Dispatcher {
 
 	protected void loadDBConfig() throws Exception {
 		_htblConfig = new Hashtable<String, String>();
-		JsonObject commands = JsonObject.readFrom(new FileReader("config/settings.json")).get("dbConfig").asObject();
+		JsonObject commands = JsonObject.readFrom(new FileReader("config/settings.json"))
+				.get("dbConfig").asObject();
 		Iterator<Member> it = commands.iterator();
 		while (it.hasNext()) {
 			Member member = it.next();
@@ -133,12 +135,12 @@ public class Dispatcher {
 	protected void loadThreadPool() {
 		_threadPoolCmds = Executors.newFixedThreadPool(20);
 	}
-
+	
 	protected void loadMongo(String DBName, String userName, String password, String host, String port) {
 		List<MongoCredential> auths = new ArrayList<MongoCredential>();
 		MongoCredential credential = MongoCredential.createCredential(userName, DBName, password.toCharArray());
 		auths.add(credential);
-		ServerAddress serverAddress = new ServerAddress(host, 27017);
+		ServerAddress serverAddress = new ServerAddress(host, Integer.parseInt(port));
 		mongoClient = new MongoClient(serverAddress, auths);
 	}
 	
@@ -148,10 +150,11 @@ public class Dispatcher {
 
 	public void init() throws Exception {
 		loadSettings();
-		loadHikari(_htblConfig.get("dbHostName"), _htblConfig.get("dbPortNumber"), _htblConfig.get("dbUserName"),
-				_htblConfig.get("dbName"), _htblConfig.get("dbPassword"));
+		loadHikari(_htblConfig.get("dbHostName"), _htblConfig.get("dbPortNumber"),
+				_htblConfig.get("dbName"), _htblConfig.get("dbUserName"),
+				_htblConfig.get("dbPassword"));
 		loadMongo(_htblConfig.get("mongoDBName"), _htblConfig.get("mongoUser"), _htblConfig.get("mongoPassword"),
-				_htblConfig.get("dbHostName"), _htblConfig.get("mongoPort"));
+						_htblConfig.get("dbHostName"), _htblConfig.get("mongoPort"));
 		loadThreadPool();
 	}
 }
