@@ -36,7 +36,7 @@ DROP PROCEDURE IF EXISTS update_product;
 DROP PROCEDURE IF EXISTS view_price_products_cart;
 DROP PROCEDURE IF EXISTS all_products;
 
-DROP PROCEDURE IF EXISTS sort_products;
+DROP PROCEDURE IF EXISTS sort_products_price;
 
 
 DELIMITER //
@@ -659,7 +659,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `mydb`.`sort_products` (IN sorting_method int)
+CREATE PROCEDURE `mydb`.`sort_products_price` (IN sorting_method int)
    BEGIN
   if sorting_method= 0
     then

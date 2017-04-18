@@ -1,6 +1,7 @@
 {
-	"commands.user": {
-		"addUserSimple": "AddUserSimpleCmd",
-		"attemplogin": "AttemptLoginCmd"		
-	}
+	"commands.product": {
+		"indexProducts": "IndexProductsCmd",
+		"sortProducts": "SortProductsCmd",
+		"viewPriceInCart": "ViewPriceOfProductsCartCmd"
+	}		
 }
