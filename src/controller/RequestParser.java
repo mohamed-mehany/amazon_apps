@@ -44,7 +44,6 @@ public class RequestParser implements Runnable {
 					data.put(x.getName(), x.getValue().asString());
 				}
 			}
-//			System.out.println("*********** "+data.toString());
 
 			ClientRequest clientRequest = new ClientRequest(command, sessionID, data);
 			_parseListener.parsingFinished(_clientHandle, clientRequest);
