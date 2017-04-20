@@ -88,5 +88,10 @@ public final class Services {
 		Timer timerUsers = new Timer();
 		timerUsers.schedule(new SayHello("Users", "192.168.1.144", "EXCHANGE_SERVER1"), 0, 500);
 
+		// Product app
+		Timer timerRatings = new Timer();
+		timerRatings.schedule(new SayHello("Products", "192.168.1.144", "EXCHANGE_SERVER1"), 0, 500);
+
+
 	}
 }
