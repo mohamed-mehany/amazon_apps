@@ -25,5 +25,8 @@
 	<classpathentry kind="lib" path="/Users/renadibrahim/Desktop/amazon_apps/libs/HikariCP-java6-2.3.1.jar"/>
 	<classpathentry kind="lib" path="/Users/renadibrahim/Desktop/amazon_apps/libs/boon-0.4.jar"/>
 	<classpathentry kind="lib" path="/Users/renadibrahim/Downloads/mysql-connector-java-5.1.41-bin.jar"/>
+	<classpathentry kind="lib" path="libs/netty-all-5.0.0.Alpha2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/amqp-client-4.0.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

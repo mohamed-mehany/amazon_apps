@@ -4,7 +4,7 @@
 		"indexProducts": "IndexProductsCmd",
 		"sortProducts": "SortProductsCmd",
 		"viewPriceInCart": "ViewPriceOfProductsCartCmd"
-	}		
+	},		
 
 	"commands.user": {
 		"addUserSimple": "AddUserSimpleCmd",

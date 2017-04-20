@@ -20,7 +20,10 @@ public class ViewPriceOfProductsCartCmd extends Command implements Runnable {
 		System.out.println();
 		System.out.println(product_id);
 		System.out.println(quantity);
-		sqlProc = connection.prepareCall("{call view_price_products_cart(?,?)}");
+		sqlProc = connection.prepareCall("{call view_price_products_cart"+"(?,?)"+"}");
+		
+		
+		
 		sqlProc.setInt(1, product_id);
 		sqlProc.setInt(2, quantity);
 

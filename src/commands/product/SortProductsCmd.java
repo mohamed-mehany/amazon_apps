@@ -16,7 +16,9 @@ public class SortProductsCmd extends Command implements Runnable {
 
 		sorting_method = (Integer) mapUserData.get("sorting_method");
 
-		sqlProc = connection.prepareCall("{call sort_products_price(?)}");
+		sqlProc = connection.prepareCall("{call sort_products_price"+"(?)"+"}");
+		
+		
 		sqlProc.setInt(1, sorting_method);
 
 		sqlProc.execute();

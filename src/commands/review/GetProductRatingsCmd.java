@@ -33,6 +33,7 @@ public class GetProductRatingsCmd extends Command implements Runnable {
 
 			for (int i = 1; i <= columnsNumber; i++) {
 				o.add(rsmd.getColumnName(i), r.getString(i));
+				
 			}
 
 			strbufResult.append(o);
