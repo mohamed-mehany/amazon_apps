@@ -32,13 +32,13 @@ public class Receiver {
 		}
 	}
 
-	String tag;
-	String exchange_name;
-	String server_ip;
-	Channel channel = null;
-	Connection connection;
-	String queueName;
-	ConnectionFactory factory;
+	public String tag;
+	public String exchange_name;
+	public String server_ip;
+	public Channel channel = null;
+	public Connection connection;
+	public String queueName;
+	public ConnectionFactory factory;
 	public Receiver(String tag, String ip, String key) {
 		this.tag = tag;
 		server_ip = ip;
