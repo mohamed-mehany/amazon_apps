@@ -124,10 +124,15 @@ public class Receiver {
 		try {
 
 			HttpPost request = new HttpPost("http://localhost:3030");
+			//adding queue parameter
+			message = message.substring(0,message.length()-2);
+			message = message + ",\n\"queue\": " + "\""+tag+"\"\n}";
 			StringEntity params =new StringEntity(message);
+
 			request.addHeader("content-type", "text/plain");
 			request.setEntity(params);
-			HttpResponse response = httpClient.execute(request);
+
+			 httpClient.execute(request);
 
 		}catch (Exception ex) {
 			ex.printStackTrace();

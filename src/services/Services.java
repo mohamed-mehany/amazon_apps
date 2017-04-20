@@ -100,12 +100,12 @@ public final class Services {
 
 	public static void runReceivers() throws Exception {
 		
-//		  Timer timerRatings = new Timer(); timerRatings.schedule(new
-//		  SayHello("Ratings", "192.168.1.144", "EXCHANGE_SERVER1"), 0, 500);
-//		  Timer timerMessages = new Timer(); timerMessages.schedule(new
-//		  SayHello("Messages", "192.168.1.144", "EXCHANGE_SERVER1"), 0, 500);
-//		  Timer timerUsers = new Timer(); timerUsers.schedule(new
-//		  SayHello("Users", "192.168.1.144", "EXCHANGE_SERVER1"), 0, 500);
+		  Timer timerRatings = new Timer(); timerRatings.schedule(new
+		  SayHello("Ratings", "127.0.0.1", "EXCHANGE_SERVER1"), 0, 500);
+		  Timer timerMessages = new Timer(); timerMessages.schedule(new
+		  SayHello("Messages", "127.0.0.1", "EXCHANGE_SERVER1"), 0, 500);
+		  Timer timerUsers = new Timer(); timerUsers.schedule(new
+		  SayHello("Users", "127.0.0.1", "EXCHANGE_SERVER1"), 0, 500);
 		  Timer timerProducts = new Timer();
 		  timerProducts.schedule(new SayHello("Products", "127.0.0.1",
 				"EXCHANGE_SERVER1"), 0, 500);

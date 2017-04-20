@@ -17,7 +17,8 @@ public class GetProductRatingsCmd extends Command implements Runnable {
 		StringBuffer strbufResult = new StringBuffer(""), strbufResponseJSON;
 		int product_id;
 		int nSQLResult;
-
+		System.out.println(mapUserData.toString());
+		strbufResult.append("\"queue\": "+(String) mapUserData.get("queue"));
 		product_id = (Integer) mapUserData.get("product_id");
 
 		getRatings = connection.prepareCall("{call get_products_reviews" + "(?)" + "}");
