@@ -7,7 +7,8 @@
 	"commands.message": {
 		"sendMessage": "SendMessageCmd",
 		"viewMessages": "ViewMessagesCmd",
-		"viewSingleMessage": "ViewSingleMessageCmd"
+		"viewSingleMessage": "ViewSingleMessageCmd",
+		"viewAllMessage": "ViewAllMessagesBetween2UsersCmd"
 	},
 
     "commands.review": {

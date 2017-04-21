@@ -1,5 +1,6 @@
 package commands.message;
 
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,20 +11,22 @@ import com.eclipsesource.json.JsonObject;
 
 import commands.Command;
 
-
-public class ViewSingleMessageCmd extends Command implements Runnable {
+public class ViewAllMessagesBetween2UsersCmd extends Command implements Runnable{
 	@Override
 	public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
 		// TODO Auto-generated method stub
 		CallableStatement sqlProc;
 		StringBuffer strbufResult = null, strbufResponseJSON;
 		int receiverID;
+		int senderID;
 		
 		try {
 			
 			receiverID = ((Integer) mapUserData.get("receiver_id"));
-			sqlProc = connection.prepareCall("{call view_single_message(?)}");
+			senderID = ((Integer) mapUserData.get("sender_id"));
+			sqlProc = connection.prepareCall("{call view_all_messages_between_2_users(?,?)}");
 			sqlProc.setInt(1, receiverID);
+			sqlProc.setInt(2, senderID);
 			sqlProc.execute();
 			strbufResult = makeJSONResponseEnvelope(3, null, null);
 			
