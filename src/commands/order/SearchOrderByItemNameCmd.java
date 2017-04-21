@@ -26,4 +26,8 @@ public class SearchOrderByItemNameCmd extends Command implements Runnable {
 		strbufResult = makeJSONResponseEnvelope(0, null, strbufResponseJSON);
 		return strbufResult;
 	}
+	
+	public static void main(String [] args)  {
+		
+	}
 }

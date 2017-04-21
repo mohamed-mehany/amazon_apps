@@ -80,13 +80,12 @@ public class Dispatcher {
 
 	protected void loadHikari(String strAddress, String nPort, String strDBName,
 			String strUserName, String strPassword) {
-
 		_hikariDataSource = new HikariDataSource();
 		_hikariDataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		_hikariDataSource
-				.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/mydb");
-		_hikariDataSource.setUsername("root");
-		_hikariDataSource.setPassword("");
+				.setJdbcUrl("jdbc:mysql://" + strAddress + ":" + nPort + "/" + strDBName);
+		_hikariDataSource.setUsername(strUserName);
+		_hikariDataSource.setPassword(strPassword);
 		// testHikari();
 	}
 
@@ -121,11 +120,9 @@ public class Dispatcher {
 			Member member = it.next();
 			_htblConfig.put(member.getName(), member.getValue().asString());
 		}
-
 	}
 	
 	protected void loadElasticConfig() throws Exception {
-		_htblConfig = new Hashtable<String, String>();
 		JsonObject commands = JsonObject.readFrom(new FileReader("config/settings.json"))
 				.get("elasticConfig").asObject();
 		Iterator<Member> it = commands.iterator();
@@ -153,9 +150,15 @@ public class Dispatcher {
 
 	public void init() throws Exception {
 		loadSettings();
-		loadHikari(_htblConfig.get("dbHostName"), _htblConfig.get("dbPortNumber"),
-				_htblConfig.get("dbName"), _htblConfig.get("dbUserName"),
+		loadHikari(_htblConfig.get("dbHostName"),
+				_htblConfig.get("dbPortNumber"),
+				_htblConfig.get("dbName"),
+				_htblConfig.get("dbUserName"),
 				_htblConfig.get("dbPassword"));
+
+//		loadHikari("127.0.0.1", "3306",
+//				"mydb", "root",
+//				"");
 		loadElasticSearch();
 		loadThreadPool();
 	}

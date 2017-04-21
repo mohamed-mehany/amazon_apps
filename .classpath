@@ -16,12 +16,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/ebrahim-elgaml/MSA/amazon_apps2/libs/postgresql-9.3-1102.jdbc41.jar"/>
-	<classpathentry kind="lib" path="/Users/ebrahim-elgaml/MSA/amazon_apps2/libs/boon-0.4.jar"/>
-	<classpathentry kind="lib" path="/Users/ebrahim-elgaml/MSA/amazon_apps2/libs/HikariCP-java6-2.3.1.jar"/>
-	<classpathentry kind="lib" path="/Users/ebrahim-elgaml/MSA/amazon_apps2/libs/javassist.jar"/>
-	<classpathentry kind="lib" path="/Users/ebrahim-elgaml/MSA/amazon_apps2/libs/minimal-json-0.9.3.jar"/>
-	<classpathentry kind="lib" path="/Users/ebrahim-elgaml/MSA/amazon_apps2/libs/slf4j-api-1.7.10.jar"/>
-	<classpathentry kind="lib" path="/Users/ebrahim-elgaml/MSA/amazon_apps2/libs/slf4j-jdk14-1.7.10.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
