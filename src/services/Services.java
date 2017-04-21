@@ -109,6 +109,9 @@ public final class Services {
 		  Timer timerProducts = new Timer();
 		  timerProducts.schedule(new SayHello("Products", "127.0.0.1",
 				"EXCHANGE_SERVER1"), 0, 500);
+//		Timer mohsenTimer = new Timer();
+//		mohsenTimer.schedule(new SayHello("mohsen", "127.0.0.1",
+//				"EXCHANGE_SERVER1"), 0, 500);
 
 	}
 }

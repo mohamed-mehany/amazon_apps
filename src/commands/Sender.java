@@ -27,7 +27,7 @@ public class Sender {
 		BufferedReader Br = null;
 		FileReader Fr = null;
 		try {
-			Fr = new FileReader("config");
+			Fr = new FileReader("config/config");
 			Br = new BufferedReader(Fr);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -81,8 +81,8 @@ public class Sender {
 		}
 	}
 
-	public static void main(String[] argv) throws java.io.IOException {
-		Sender sender = new Sender("mowafy", "localhost", "EXCHANGE_SERVER1");
-		sender.send("NEW22");
-	}
+//	public static void main(String[] argv) throws java.io.IOException {
+//		Sender sender = new Sender("mowafy", "localhost", "EXCHANGE_SERVER1");
+//		sender.send("NEW22");
+//	}
 }
