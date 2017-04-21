@@ -17,6 +17,9 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
+import commands.Dispatcher;
+import services.Services;
+
 public class ElasticSearch {
 	public TransportClient client;
 	final static String INDEX_NAME = "amazon";
@@ -57,7 +60,7 @@ public class ElasticSearch {
 		if(id == null) throw new Exception("No ID Found");
 		map.remove("id");
 		XContentBuilder builder = getBuilderFromMap(map);
-		IndexResponse response = elasticSearchClient.client.prepareIndex(INDEX_NAME, type, id)
+		IndexResponse response = getInstance().client.prepareIndex(INDEX_NAME, type, id)
 		        .setSource(builder)
 		        .get();
 		return response.status().getStatus() == 200;

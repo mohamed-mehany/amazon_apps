@@ -4,16 +4,16 @@ import java.sql.Connection;
 import java.util.Map;
 
 import commands.Command;
-import elasticsearch.ReviewSearch;
+import elasticsearch.ProductHasDepartment;
 
-public class SearchReviewsCmd extends Command implements Runnable {
+public class SearchProductHashDepartmentCmd extends Command implements Runnable {
 	public StringBuffer execute(Connection connection, Map<String, Object> map)
 			throws Exception {
 		StringBuffer strbufResult = null, strbufResponseJSON = null;
-		String query = (String) map.get("query");
-		String userId = (String) map.get("userId");
+		String productName = (String) map.get("product_name");
+		String departmentId = (String) map.get("department_id");
 		
-		strbufResponseJSON = serializeArrayMaptoJSON(ReviewSearch.searchUserReviews(query, userId));
+		strbufResponseJSON = serializeArrayMaptoJSON(ProductHasDepartment.searchProducts(productName, departmentId));
 		
 		strbufResult = makeJSONResponseEnvelope(0, null, strbufResponseJSON);
 		return strbufResult;

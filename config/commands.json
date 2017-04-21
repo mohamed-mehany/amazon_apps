@@ -5,6 +5,10 @@
 	},
 	"commands.search": {
 		"searchOrderByItemName": "SearchOrderByItemNameCmd"	,
-		"searchReviews": "SearchReviewsCmd"
+		"searchReviews": "SearchReviewsCmd",
+		"searchProducts": "SearchProductsCmd",
+		"searchProuctHasDepartments": "SearchProductHashDepartmentCmd",
+		"searchDepartments": "SearchDepartmentCmd",
+		"searchItems": "SearchItemCmd"
 	}
 }

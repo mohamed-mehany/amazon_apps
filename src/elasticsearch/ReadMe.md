@@ -28,6 +28,11 @@
    ./elastic_search_script.sh
 ```
 
+### to pouplate some data 
+
+```
+   Run elasticsearch.Seeds class
+```
 
 
 
