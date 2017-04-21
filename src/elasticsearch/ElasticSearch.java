@@ -5,10 +5,12 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
@@ -65,7 +67,13 @@ public class ElasticSearch {
 		GetResponse response = elasticSearchClient.client.prepareGet(INDEX_NAME, type, id).get();
 		return response;
 	}
-
+	
+	public static ArrayList<Map<String, Object>> searchResponseToArray(SearchResponse s) {
+		ArrayList<Map<String, Object>>  result = new ArrayList<Map<String, Object>> ();
+		for(int i = 0; i < s.getHits().getTotalHits(); ++i)
+			result.add(s.getHits().getAt(i).getSource());
+		return result;
+	}
 
 
 }

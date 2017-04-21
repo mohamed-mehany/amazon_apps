@@ -11,6 +11,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import controller.ClientHandle;
 import controller.ClientRequest;
 import controller.ResponseCodes;
+import elasticsearch.ReviewSearch;
 
 public abstract class Command {
 
@@ -159,6 +160,28 @@ public abstract class Command {
 					strbufJSON.append(",");
 				}
 			}
+			if (strbufJSON.charAt(strbufJSON.length() - 1) == ',')
+				strbufJSON.setLength(strbufJSON.length() - 1);
+			strbufJSON.append("},");
+		}
+
+		if (strbufJSON.charAt(strbufJSON.length() - 1) == ',')
+			strbufJSON.setLength(strbufJSON.length() - 1);
+
+		strbufJSON.append("]");
+
+		return strbufJSON;
+	}
+	
+	protected StringBuffer serializeArrayMaptoJSON(ArrayList<Map<String, Object>> list) throws Exception {
+
+		StringBuffer strbufJSON;
+		strbufJSON = new StringBuffer();
+		strbufJSON.append("[ ");
+
+		for(Map<String, Object> item : list) {
+			strbufJSON.append("{");
+			strbufJSON.append(serializeMaptoJSON(item, null));
 			if (strbufJSON.charAt(strbufJSON.length() - 1) == ',')
 				strbufJSON.setLength(strbufJSON.length() - 1);
 			strbufJSON.append("},");

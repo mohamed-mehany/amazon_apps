@@ -4,6 +4,7 @@
 		"attemplogin": "AttemptLoginCmd"
 	},
 	"commands.search": {
-		"searchOrderByItemName": "SearchOrderByItemNameCmd"	
+		"searchOrderByItemName": "SearchOrderByItemNameCmd"	,
+		"searchReviews": "SearchReviewsCmd"
 	}
 }
