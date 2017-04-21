@@ -9,6 +9,7 @@
 		"searchProducts": "SearchProductsCmd",
 		"searchProuctHasDepartments": "SearchProductHashDepartmentCmd",
 		"searchDepartments": "SearchDepartmentCmd",
-		"searchItems": "SearchItemCmd"
+		"searchItems": "SearchItemCmd",
+		"searchReviwByRating": "SearchReviwByRatingCmd"
 	}
 }

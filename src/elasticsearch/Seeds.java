@@ -73,7 +73,7 @@ public class Seeds {
 		
 		ElasticSearch.write("product", product1);ElasticSearch.write("product", product2);
 		
-		////// INSERT PRODUCT_HAS_DEPARTMENT
+		////// INSERT DEPARTMENT
 		Map<String, Object> d1 = new HashMap<String, Object>();
 		Map<String, Object> d2 = new HashMap<String, Object>();
 				
@@ -96,6 +96,8 @@ public class Seeds {
 		ElasticSearch.write("item", item1);ElasticSearch.write("item", item2);
 		ElasticSearch.write("item", item3);ElasticSearch.write("item", item4);
 		
+		Thread.sleep(2000);
+		
 		////// SEARCH
 		System.out.println("searching..........");
 		System.out.println(OrderSearch.fuzzySearchByItemName("item", "2"));
@@ -107,6 +109,7 @@ public class Seeds {
 		System.out.println(ItemSearch.searchItemsByName("item", "", ""));
 		System.out.println(ItemSearch.searchItemsByName("item", "price", "asc"));
 		System.out.println(ItemSearch.searchItemsByName("item", "created_at", "desc"));
+		System.out.println(ReviewSearch.searchAllReviewsByValue("2"));
 		
 	}
 }
