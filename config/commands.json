@@ -3,7 +3,7 @@
 		"addUserSimple": "AddUserSimpleCmd",
 		"attemplogin": "AttemptLoginCmd"
 	},
-	"commands.order": {
-		"searchOrderByItemNameCmd": "SearchOrderByItemNameCmd"	
+	"commands.search": {
+		"searchOrderByItemName": "SearchOrderByItemNameCmd"	
 	}
 }

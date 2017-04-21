@@ -2,11 +2,13 @@ package controller;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.boon.json.implementation.JsonStringDecoder;
 
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonObject.Member;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpContent;
@@ -32,14 +34,11 @@ public class RequestParser implements Runnable {
 			String command = body.get("command").asString();
 			String sessionID = body.get("sessionID").asString();
 			Map<String, Object> data = new HashMap<String, Object>();
-			data.put("email", jsonData.get("email").asString());
-			data.put("password", jsonData.get("password").asString());
-			data.put("firstName", jsonData.get("firstName").asString());
-			data.put("lastName", jsonData.get("lastName").asString());
-			data.put("address", jsonData.get("address").asString());
-			data.put("date", jsonData.get("date").asString());
-			data.put("token", jsonData.get("token").asString());
-			data.put("gender", jsonData.get("gender").asInt());
+			Iterator<Member> it = jsonData.iterator();
+			while (it.hasNext()) {
+				Member member = it.next();
+				data.put(member.getName(), member.getValue().asString());
+			}
 			ClientRequest clientRequest = new ClientRequest(command, sessionID, data);
 			_parseListener.parsingFinished(_clientHandle, clientRequest);
 		} catch (Exception exp) {
