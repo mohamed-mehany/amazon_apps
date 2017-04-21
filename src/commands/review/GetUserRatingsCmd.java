@@ -22,23 +22,7 @@ public class GetUserRatingsCmd extends Command implements Runnable {
 		getRatings = connection.prepareCall("{call get_user_reviews"+"(?)"+"}");
 		getRatings.setInt(1, user_id);
 		ResultSet r = getRatings.executeQuery();
-
-		ResultSetMetaData rsmd = r.getMetaData();
-
-		int columnsNumber = rsmd.getColumnCount();
-
-		while (r.next()) {
-			JsonObject o = new JsonObject();
-
-			for (int i = 1; i <= columnsNumber; i++) {
-				o.add(rsmd.getColumnName(i), r.getString(i));
-			}
-
-			strbufResult.append(o);
-		}
-		System.out.println(r.toString());
-		r.close();
-//		strbufResult = makeJSONResponseEnvelope(getRatings.getInt(1), null, null);
+		strbufResult.append(changeToJSONFormat(r));
 		getRatings.close();
 
 		return strbufResult;

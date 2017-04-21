@@ -3,16 +3,20 @@ package commands;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.mysql.jdbc.exceptions.MySQLDataException;
 import com.zaxxer.hikari.HikariDataSource;
 
 import controller.ClientHandle;
 import controller.ClientRequest;
 import controller.ResponseCodes;
 
-public abstract class Command {
+public abstract class 	Command {
 
 	protected HikariDataSource _hikariDataSource;
 	protected ClientHandle _clientHandle;
@@ -198,4 +202,30 @@ public abstract class Command {
 
 	public abstract StringBuffer execute(Connection connection,
 			Map<String, Object> mapUserData) throws Exception;
+
+	public String changeToJSONFormat(ResultSet r) throws SQLException {
+		ResultSetMetaData rsmd = r.getMetaData();
+		int columnsNumber = rsmd.getColumnCount();
+		JsonArray json = new JsonArray();
+		while (r.next()) {
+			JsonObject o = new JsonObject();
+			for (int i = 1; i <= columnsNumber; i++) {
+				if(r.getString(i)==null)
+					o.add(rsmd.getColumnName(i),"null");
+				else
+					o.add(rsmd.getColumnName(i), r.getString(i));
+			}
+			json.add(o);
+		}
+		r.close();
+		return json.toString();
+	}
+
+	public String changeToJSONFormat(String s){
+		JsonArray json = new JsonArray();
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.add("result", s);
+		json.add(jsonObject);
+		return json.toString();
+	}
 }
