@@ -5,16 +5,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.UUID;
 
 import commands.Command;
-
+import org.boon.primitive.Int;
 //name , email, password, address, date_of_birth, token, gender
 
 public class CreateVendorCmd extends Command implements Runnable {
 	
 	public StringBuffer execute(Connection connection, Map<String, Object> mapUserData)
 			throws Exception {
-		StringBuffer strbufResult;
+		StringBuffer strbufResult= new StringBuffer("");
 		//String strbufResult;
 		PreparedStatement sqlProc;
 		String strEmail, strPassword, strName, strAddress, strDateOfBirth, strToken;
@@ -45,10 +47,9 @@ public class CreateVendorCmd extends Command implements Runnable {
 		sqlProc.setString(5, strDateOfBirth);
 		sqlProc.setString(6, strToken);
 		sqlProc.setInt(7, gender);
-		sqlProc.executeQuery();
-		 
-		//strbufResult =  String.valueOf(sqlProc.execute());
-		strbufResult = makeJSONResponseEnvelope(((CallableStatement) sqlProc).getInt(1), null, null);
+		Boolean executed = sqlProc.execute();
+		strbufResult.append(changeToJSONFormat(executed+""));
+		//strbufResult = makeJSONResponseEnvelope(((CallableStatement) sqlProc).getInt(1), null, null);
 		sqlProc.close();
 
 		return strbufResult;

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import commands.Command;
+import org.boon.primitive.Int;
 import services.Cache;
 
 public class LogoutCmd extends Command implements Runnable {
@@ -17,7 +18,7 @@ public class LogoutCmd extends Command implements Runnable {
 			throws Exception {
 
 		CallableStatement sqlProc;
-		StringBuffer strbufResult = null;
+		StringBuffer strbufResult = new StringBuffer("");
 		String strToken;
 		Integer id;
 
@@ -30,10 +31,10 @@ public class LogoutCmd extends Command implements Runnable {
 		sqlProc = connection.prepareCall("{call user_logout(?,?)}");
 		sqlProc.setString(1, strToken);
 		sqlProc.setInt(2, id);
-		sqlProc.execute();
-		//strbufResult= String.valueOf(sqlProc.execute());
+		Boolean executed = sqlProc.execute();
+		strbufResult.append(changeToJSONFormat(executed + ""));
 		sqlProc.close();
-		strbufResult = makeJSONResponseEnvelope(200, null, null);
+		//strbufResult = makeJSONResponseEnvelope(200, null, null);
 		return strbufResult;
 	}
 }

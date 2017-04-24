@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import commands.Command;
+import org.boon.primitive.Int;
 import services.Cache;
 
 public class LoginCmd extends Command implements Runnable {
@@ -16,8 +17,8 @@ public class LoginCmd extends Command implements Runnable {
     throws Exception {
         
         CallableStatement sqlProc;
-        StringBuffer strbufResult = null, strbufResponseJSON;
-        String strSessionID, strEmail, strPassword, strFirstName, strClientIP;
+        StringBuffer strbufResult = new StringBuffer("");
+        String  strEmail, strPassword;
         int nSQLResult;
         
         strEmail = ((String) mapUserData.get("email"));
@@ -34,7 +35,8 @@ public class LoginCmd extends Command implements Runnable {
         sqlProc.setString(1, strEmail);
         sqlProc.setString(2, strPassword);
         sqlProc.registerOutParameter(3, Types.INTEGER);
-        sqlProc.execute();
+        Boolean executed = sqlProc.execute();
+		strbufResult.append(changeToJSONFormat(executed + ""));
         nSQLResult = sqlProc.getInt(3);
         sqlProc.close();
         if (nSQLResult >= 0) {
@@ -45,9 +47,7 @@ public class LoginCmd extends Command implements Runnable {
             System.out.println(" user failed to log in " );
             System.err.println(" user failed to log in " );
         }
-        strbufResult = makeJSONResponseEnvelope(0, null, null);
-        //strbufResult= String.valueOf(nSQLResult);
-        
+        //strbufResult = makeJSONResponseEnvelope(0, null, null);        
         return strbufResult;
     }
 }
