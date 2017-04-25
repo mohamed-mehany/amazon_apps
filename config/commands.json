@@ -2,5 +2,20 @@
 	"commands.user": {
 		"addUserSimple": "AddUserSimpleCmd",
 		"attemplogin": "AttemptLoginCmd"		
+	},
+	
+	"commands.message": {
+		"sendMessage": "SendMessageCmd",
+		"viewMessages": "ViewMessagesCmd"		
+	},
+
+	"commands.cart": {
+		"AddItemToCart": "AddItemToCartCmd",
+		"ChangeItemQuantity": "ChangeItemQuantityCmd",
+		"ProceedToPayment": "ProceedToPaymentCmd",
+		"RemoveItemFromCart": "RemoveItemFromCartCmd",
+		"ViewCart": "ViewCartCmd",
+		"ViewTotalPrice": "ViewTotalPriceCmd",
+		"CreateBankingInfo": "CreateBankingInfoCmd"
 	}
 }

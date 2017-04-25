@@ -6,14 +6,21 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.mysql.jdbc.Driver;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonObject.Member;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoDatabase;
 import com.eclipsesource.json.JsonValue;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -26,13 +33,13 @@ public class Dispatcher {
 	protected Hashtable<String, String> _htblConfig;
 	protected ExecutorService _threadPoolCmds;
 	protected HikariDataSource _hikariDataSource;
+	public static MongoClient mongoClient;
 
 	public Dispatcher() {
 	}
 
 	public void dispatchRequest(ClientHandle clientHandle, ClientRequest clientRequest)
 			throws Exception {
-
 		Command cmd;
 		String strAction;
 		strAction = clientRequest.getAction();
@@ -44,20 +51,27 @@ public class Dispatcher {
 	}
 
 	protected void testHikari() {
+		String strFirstName = "Hello";
 		String strEmail = "mohamed123@m.com";
 		String strPassword = "123";
-		String strFirstName = "Hello";
-		String strLastName = "World";
-
+		String strAddress = "World";
+		String strDate = "2012.01.01 12:12:12";
+		String strToken = "1213142323";
+		int gender = 1;
 		try {
 			Connection connection = _hikariDataSource.getConnection();
 			CallableStatement sqlProc = connection
-					.prepareCall("{?=call addUserSimple(?,?,?,?)}");
-			sqlProc.registerOutParameter(1, Types.INTEGER);
+					.prepareCall("{call create_user(?, ?, ?, ?, ?, ?, ?)}");
+			
+			
+			//sqlProc.registerOutParameter(1, Types.INTEGER);
+			sqlProc.setString(1, strFirstName);
 			sqlProc.setString(2, strEmail);
 			sqlProc.setString(3, strPassword);
-			sqlProc.setString(4, strFirstName);
-			sqlProc.setString(5, strLastName);
+			sqlProc.setString(4, strAddress);
+			sqlProc.setString(5, strDate);
+			sqlProc.setString(6, strToken);
+			sqlProc.setInt(7, gender);
 
 			sqlProc.execute();
 			sqlProc.close();
@@ -71,8 +85,9 @@ public class Dispatcher {
 			String strUserName, String strPassword) {
 
 		_hikariDataSource = new HikariDataSource();
-		_hikariDataSource.setJdbcUrl(
-				"jdbc:postgresql://" + strAddress + ":" + nPort + "/" + strDBName);
+		_hikariDataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		_hikariDataSource
+				.setJdbcUrl("jdbc:mysql://" + strAddress + ":" + nPort + "/" + strDBName);
 		_hikariDataSource.setUsername(strUserName);
 		_hikariDataSource.setPassword(strPassword);
 		// testHikari();
@@ -120,12 +135,26 @@ public class Dispatcher {
 	protected void loadThreadPool() {
 		_threadPoolCmds = Executors.newFixedThreadPool(20);
 	}
+	
+	protected void loadMongo(String DBName, String userName, String password, String host, String port) {
+		List<MongoCredential> auths = new ArrayList<MongoCredential>();
+		MongoCredential credential = MongoCredential.createCredential(userName, DBName, password.toCharArray());
+		auths.add(credential);
+		ServerAddress serverAddress = new ServerAddress(host, Integer.parseInt(port));
+		mongoClient = new MongoClient(serverAddress, auths);
+	}
+	
+	public static MongoDatabase getDataBase(String DBName) {
+		return mongoClient.getDatabase(DBName);
+	}
 
 	public void init() throws Exception {
 		loadSettings();
 		loadHikari(_htblConfig.get("dbHostName"), _htblConfig.get("dbPortNumber"),
-				_htblConfig.get("dbUserName"), _htblConfig.get("dbName"),
+				_htblConfig.get("dbName"), _htblConfig.get("dbUserName"),
 				_htblConfig.get("dbPassword"));
+		loadMongo(_htblConfig.get("mongoDBName"), _htblConfig.get("mongoUser"), _htblConfig.get("mongoPassword"),
+						_htblConfig.get("dbHostName"), _htblConfig.get("mongoPort"));
 		loadThreadPool();
 	}
 }
