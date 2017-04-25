@@ -15,6 +15,7 @@
 		"ProceedToPayment": "ProceedToPaymentCmd",
 		"RemoveItemFromCart": "RemoveItemFromCartCmd",
 		"ViewCart": "ViewCartCmd",
-		"ViewTotalPrice": "ViewTotalPriceCmd"
+		"ViewTotalPrice": "ViewTotalPriceCmd",
+		"CreateBankingInfo": "CreateBankingInfoCmd"
 	}
 }

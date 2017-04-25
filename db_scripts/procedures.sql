@@ -35,6 +35,11 @@ DROP PROCEDURE IF EXISTS update_product;
 DROP PROCEDURE IF EXISTS send_message;
 DROP PROCEDURE IF EXISTS view_messages;
 
+DROP PROCEDURE IF EXISTS get_total_rating;
+
+DROP PROCEDURE IF EXISTS create_banking_info;
+
+
 
 DELIMITER //
 CREATE PROCEDURE `view_ratings_of_sellers_product` (IN product_id INT, IN seller_id INT)
@@ -653,7 +658,7 @@ DELIMITER ;
 
 CREATE PROCEDURE `mydb`.`get_user_reviews` (IN user_id INT)
 begin
-  SELECT * FROM rating r WHERE r.user_id = user_id;
+  SELECT * FROM rating r WHERE r.user_id = user_id
 end //
 
 DELIMITER ;
@@ -696,8 +701,7 @@ begin
         );
 end //
 
-DROP procedure IF EXISTS my
-db.get_total_rating
+
 
 DELIMITER //
 CREATE PROCEDURE `mydb`.`get_total_rating` (IN products_id INT, OUT res INT)
@@ -712,8 +716,29 @@ end //
 DELIMITER ;
 -- call mydb.filterItemsByFeature(1, NULL, 25);
 
+DELIMITER  //
+CREATE PROCEDURE create_banking_info
+     (
+        IN  card_number     VARCHAR(255),
+        IN  card_holder    VARCHAR(255),
+        IN provider  VARCHAR(255) ,
+        IN type   VARCHAR(20),
+        IN user_id INT
+     )
+BEGIN
+    INSERT INTO banking_info
+         (
+           card_number,
+           card_holder,
+           provider,
+           type,
+           user_id
+         )
+    VALUES
+         (card_number, card_holder, provider, type, user_id);
+END //
+
+DELIMITER ;
 
 
 
-
-13:40:04  -- call mydb.view_messages(2);   CREATE PROCEDURE `mydb`.`get_user_reviews` (IN user_id INT) begin   SELECT * FROM rating r WHERE r.user_id = user_id Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 6  0.00032 sec

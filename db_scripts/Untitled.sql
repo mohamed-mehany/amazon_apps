@@ -7,4 +7,9 @@
 
 -- INSERT INTO department (name, description) values ('dep1', 'dep1 desc')
 
-call add_product('prod1', 1, 'prod1 desc', 1, 5, 10, 'red', 3.5, 'image path')
+-- call add_product('prod1', 1, 'prod1 desc', 1, 5, 10, 'red', 3.5, 'image path')
+
+-- call getItemInfo(1)
+
+call create_banking_info('22222222222', 'khalid', 'CIB', '2', 1);
+
