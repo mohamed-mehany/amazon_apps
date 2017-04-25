@@ -11,5 +11,9 @@
 
 -- call getItemInfo(1)
 
-call create_banking_info('22222222222', 'khalid', 'CIB', '2', 1);
+-- call create_banking_info('22222222222', 'khalid', 'CIB', '2', 1);
+-- call create_order(1, 1);
+
+-- call add_item_to_order(1, 1, 1, 4);
+-- call get_banking_info(2)
 

@@ -16,13 +16,13 @@ public class CreateBankingInfoCmd extends Command implements Runnable {
 		String type = (String) mapUserData.get("type");
 		int userID = (int) mapUserData.get("userID");
 		
-		CallableStatement createBaningInfo = connection.prepareCall("{call create_banking_info(?, ?, ?, ?, ?)}");
-		createBaningInfo.setString(1, cardNumber);
-		createBaningInfo.setString(2, cardHolder);
-		createBaningInfo.setString(3, provider);
-		createBaningInfo.setString(4, type);
-		createBaningInfo.setInt(5, userID);
-		createBaningInfo.execute();
+		CallableStatement createBankingInfo = connection.prepareCall("{call create_banking_info(?, ?, ?, ?, ?)}");
+		createBankingInfo.setString(1, cardNumber);
+		createBankingInfo.setString(2, cardHolder);
+		createBankingInfo.setString(3, provider);
+		createBankingInfo.setString(4, type);
+		createBankingInfo.setInt(5, userID);
+		createBankingInfo.execute();
 		return makeJSONResponseEnvelope(200, null, null);
 	}
 

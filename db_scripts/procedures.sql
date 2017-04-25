@@ -38,6 +38,11 @@ DROP PROCEDURE IF EXISTS view_messages;
 DROP PROCEDURE IF EXISTS get_total_rating;
 
 DROP PROCEDURE IF EXISTS create_banking_info;
+DROP PROCEDURE IF EXISTS create_order;
+DROP PROCEDURE IF EXISTS add_item_to_order;
+DROP PROCEDURE IF EXISTS get_banking_info;
+
+
 
 
 
@@ -740,5 +745,55 @@ END //
 
 DELIMITER ;
 
+DELIMITER  //
+CREATE PROCEDURE create_order
+     (
+        IN  user_id     INT,
+        IN  banking_info_id    INT
+     )
+BEGIN
+    INSERT INTO `order`
+         (
+           user_id,
+           banking_info_id
+         )
+    VALUES
+         (user_id, banking_info_id);
+	SET @order_id = LAST_INSERT_ID();
+    SELECT @order_id;
+END //
 
+DELIMITER ;
 
+DELIMITER  //
+CREATE PROCEDURE add_item_to_order
+     (
+        IN  order_id     INT,
+        IN  item_id    INT,
+        IN item_product_id INT,
+        IN count INT
+     )
+BEGIN
+    INSERT INTO order_has_item
+         (
+           order_id,
+           item_id,
+           item_product_id,
+           count
+         )
+    VALUES
+         (order_id, item_id, item_product_id, count);
+END //
+
+DELIMITER ;
+
+DELIMITER //
+ CREATE PROCEDURE get_banking_info (IN banking_info_id INT)
+ Begin
+ SELECT
+      b.card_number, b.card_holder, b.provider, b.type,  b.user_id
+    FROM banking_info b
+    WHERE b.id = banking_info_id;
+
+ END //
+ DELIMITER ;
