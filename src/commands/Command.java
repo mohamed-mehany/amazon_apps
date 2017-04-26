@@ -25,8 +25,7 @@ public abstract class Command {
 
 	}
 
-	public void init(HikariDataSource hikariDataSource, ClientHandle clientHandle,
-			ClientRequest clientRequest) {
+	public void init(HikariDataSource hikariDataSource, ClientHandle clientHandle, ClientRequest clientRequest) {
 		_hikariDataSource = hikariDataSource;
 		_clientRequest = clientRequest;
 		_clientHandle = clientHandle;
@@ -62,8 +61,8 @@ public abstract class Command {
 		}
 	}
 
-	protected StringBuffer makeJSONResponseEnvelope(int nResponse,
-			StringBuffer strbufRequestData, StringBuffer strbufResponseData) {
+	protected StringBuffer makeJSONResponseEnvelope(int nResponse, StringBuffer strbufRequestData,
+			StringBuffer strbufResponseData) {
 		StringBuffer strbufJSON;
 		String strStatusMsg;
 		String strData = "";
@@ -97,14 +96,13 @@ public abstract class Command {
 		return strbufJSON;
 	}
 
-	protected StringBuffer serializeRequestDatatoJSON(ArrayList arrFieldstoKeep)
-			throws Exception {
+	protected StringBuffer serializeRequestDatatoJSON(ArrayList arrFieldstoKeep) throws Exception {
 
 		return serializeMaptoJSON(_clientRequest.getData(), arrFieldstoKeep);
 	}
 
-	protected StringBuffer serializeResultSettoJSON(ResultSet resultSet,
-			ArrayList arrColstoKeep, int nMaxSize) throws Exception {
+	protected StringBuffer serializeResultSettoJSON(ResultSet resultSet, ArrayList arrColstoKeep, int nMaxSize)
+			throws Exception {
 
 		StringBuffer strbufJSON;
 		int nCount;
@@ -195,21 +193,18 @@ public abstract class Command {
 		return strbufJSON;
 	}
 
-	protected StringBuffer serializeMaptoJSON(Map<String, Object> map,
-			ArrayList arrFieldstoKeep) {
+	protected StringBuffer serializeMaptoJSON(Map<String, Object> map, ArrayList arrFieldstoKeep) {
 
 		StringBuffer strbufData;
 
 		strbufData = new StringBuffer();
 		if (arrFieldstoKeep == null) {
 			for (Map.Entry<String, Object> entry : map.entrySet())
-				strbufData.append("\"" + entry.getKey() + "\":\""
-						+ entry.getValue().toString() + "\",");
+				strbufData.append("\"" + entry.getKey() + "\":\"" + entry.getValue().toString() + "\",");
 		} else {
 			for (Map.Entry<String, Object> entry : map.entrySet()) {
 				if (arrFieldstoKeep.contains(entry.getKey()))
-					strbufData.append("\"" + entry.getKey() + "\":\""
-							+ entry.getValue().toString() + "\",");
+					strbufData.append("\"" + entry.getKey() + "\":\"" + entry.getValue().toString() + "\",");
 			}
 		}
 
@@ -219,6 +214,5 @@ public abstract class Command {
 		return strbufData;
 	}
 
-	public abstract StringBuffer execute(Connection connection,
-			Map<String, Object> mapUserData) throws Exception;
+	public abstract StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception;
 }

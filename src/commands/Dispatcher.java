@@ -7,8 +7,10 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -16,6 +18,10 @@ import com.mysql.jdbc.Driver;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonObject.Member;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoDatabase;
 import com.eclipsesource.json.JsonValue;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -30,13 +36,13 @@ public class Dispatcher {
 	protected ExecutorService _threadPoolCmds;
 	protected HikariDataSource _hikariDataSource;
 	public ElasticSearch _elasticSearchClient;
+	public static MongoClient mongoClient;
 
 	public Dispatcher() {
 	}
 
 	public void dispatchRequest(ClientHandle clientHandle, ClientRequest clientRequest)
 			throws Exception {
-
 		Command cmd;
 		String strAction;
 		strAction = clientRequest.getAction();
@@ -148,6 +154,18 @@ public class Dispatcher {
 		_elasticSearchClient = ElasticSearch.getInstance();
 	}
 
+	protected void loadMongo(String DBName, String userName, String password, String host, String port) {
+		List<MongoCredential> auths = new ArrayList<MongoCredential>();
+		MongoCredential credential = MongoCredential.createCredential(userName, DBName, password.toCharArray());
+		auths.add(credential);
+		ServerAddress serverAddress = new ServerAddress(host, Integer.parseInt(port));
+		mongoClient = new MongoClient(serverAddress, auths);
+	}
+	
+	public static MongoDatabase getDataBase(String DBName) {
+		return mongoClient.getDatabase(DBName);
+	}
+
 	public void init() throws Exception {
 		loadSettings();
 		loadHikari(_htblConfig.get("dbHostName"),
@@ -155,11 +173,9 @@ public class Dispatcher {
 				_htblConfig.get("dbName"),
 				_htblConfig.get("dbUserName"),
 				_htblConfig.get("dbPassword"));
-
-//		loadHikari("127.0.0.1", "3306",
-//				"mydb", "root",
-//				"");
 		loadElasticSearch();
+		loadMongo(_htblConfig.get("mongoDBName"), _htblConfig.get("mongoUser"), _htblConfig.get("mongoPassword"),
+						_htblConfig.get("dbHostName"), _htblConfig.get("mongoPort"));
 		loadThreadPool();
 	}
 }

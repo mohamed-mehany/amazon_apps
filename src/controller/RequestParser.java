@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+
 import org.boon.json.implementation.JsonStringDecoder;
 
 import com.eclipsesource.json.JsonObject;
@@ -32,13 +33,22 @@ public class RequestParser implements Runnable {
 			JsonObject body = JsonObject.readFrom(content.toString(CharsetUtil.UTF_8));
 			JsonObject jsonData = body.get("data").asObject();
 			String command = body.get("command").asString();
-			String sessionID = body.get("sessionID").asString();
 			Map<String, Object> data = new HashMap<String, Object>();
-			Iterator<Member> it = jsonData.iterator();
-			while (it.hasNext()) {
-				Member member = it.next();
-				data.put(member.getName(), member.getValue().asString());
+
+			String sessionID = body.get("sessionID").asString();
+			
+			Iterator<Member> temp = jsonData.iterator();
+
+			while(temp.hasNext()){
+				Member x = temp.next();
+				if (x.getValue().isNumber()){
+					data.put(x.getName(), x.getValue().asInt());
+
+				} else if (x.getValue().isString()) {
+					data.put(x.getName(), x.getValue().asString());
+				}
 			}
+
 			ClientRequest clientRequest = new ClientRequest(command, sessionID, data);
 			_parseListener.parsingFinished(_clientHandle, clientRequest);
 		} catch (Exception exp) {

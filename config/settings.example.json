@@ -4,7 +4,11 @@
         "dbName": "DB_NAME",
         "dbUserName": "DB_UNAME",
         "dbPassword": "DB_PASS",
-        "dbPortNumber": "5432"
+        "dbPortNumber": "5432",
+        "mongoDBName": "Amazon",
+        "mongoUser": "amazonUser",
+        "mongoPassword": "123456",
+        "mongoPort": "27017"
     },
     "elasticConfig": {
     	"elasticHost": "localhost",

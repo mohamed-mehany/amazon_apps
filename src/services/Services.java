@@ -19,7 +19,6 @@ public final class Services {
 	protected static Controller _controller;
 
 	public static void main(String[] args) throws Exception {
-
 		// Configure SSL.
 		final SslContext sslCtx;
 		if (SSL) {
