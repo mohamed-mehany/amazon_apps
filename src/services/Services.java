@@ -29,7 +29,6 @@ public final class Services {
 	protected static Channel channel;
 
 	public static void main(String[] args) throws Exception {
-
 		// Configure SSL.
 		final SslContext sslCtx;
 		if (SSL) {
