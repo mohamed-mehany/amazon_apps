@@ -23,7 +23,7 @@ public class CreateBankingInfoCmd extends Command implements Runnable {
 		createBankingInfo.setString(4, type);
 		createBankingInfo.setInt(5, userID);
 		createBankingInfo.execute();
-		return makeJSONResponseEnvelope(200, null, null);
+		return new StringBuffer("[").append("{\"res\":\"ok\"}").append("]");
 	}
 
 }

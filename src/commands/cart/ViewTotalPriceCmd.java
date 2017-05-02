@@ -21,7 +21,7 @@ public class ViewTotalPriceCmd extends Command implements Runnable {
 		result.append("{ \"totalPrice\" : ");
 		result.append((double) cart.get("totalPrice"));
 		result.append('}');
-		return makeJSONResponseEnvelope(200, null, result);
+		return new StringBuffer("[").append(result).append("]");
 	}
 
 }

@@ -38,10 +38,10 @@ public class RemoveItemFromCartCmd extends Command implements Runnable {
 			double totalPrice = (double) cart.get("totalPrice");
 			carts.updateOne(eq("userID", userID), new Document("$set", new Document("totalPrice", totalPrice - ((double) item.get("price") * (int) item.get("quantity")))));
 			cart = MongoDBUtils.getUserCart(mongoDB, userID);
-			return makeJSONResponseEnvelope(200, null, new StringBuffer(cart.toJson()));
+			return new StringBuffer("[").append(new StringBuffer(cart.toJson())).append("]");
 		}
 		else
-			return makeJSONResponseEnvelope(404, null, new StringBuffer("{\"error\":\"ItemNotFound\"}"));
+			return new StringBuffer("[").append("{\"error\":\"ItemNotFound\"}").append("]");
 	}
 
 }

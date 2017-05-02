@@ -45,7 +45,7 @@ public class ChangeItemQuantityCmd extends Command implements Runnable {
 			newTotalPrice += (double) itm.get("price") * (int) itm.get("quantity");
 		carts.updateOne(eq("userID", userID), new Document("$set", new Document("totalPrice", newTotalPrice)));
 		cart = MongoDBUtils.getUserCart(mongoDB, userID);
-		return makeJSONResponseEnvelope(200, null, new StringBuffer(cart.toJson()));
+		return new StringBuffer("[").append(new StringBuffer(cart.toJson())).append("]");
 	}
 
 }

@@ -7,8 +7,8 @@
         "dbPortNumber": "3306",
         "dbHostName": "127.0.0.1",
         "mongoDBName": "Amazon",
-        "mongoUser": "amazonUser",
-        "mongoPassword": "123456",
+        "mongoUser": "admin",
+        "mongoPassword": "password",
        	"mongoPort": "27017"
     },
     "elasticConfig": {

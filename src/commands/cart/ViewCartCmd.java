@@ -22,7 +22,7 @@ public class ViewCartCmd extends Command implements Runnable {
 		int userID = (int) mapUserData.get("userID");
 		MongoDatabase mongoDB = Dispatcher.getDataBase("Amazon");
 		Document cart = MongoDBUtils.getUserCart(mongoDB, userID);
-		return makeJSONResponseEnvelope(200, null, new StringBuffer(cart.toJson()));
+		return new StringBuffer("[").append(new StringBuffer(cart.toJson())).append("]");
 	}
 
 }

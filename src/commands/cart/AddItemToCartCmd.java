@@ -29,7 +29,7 @@ public class AddItemToCartCmd extends Command implements Runnable {
 	public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
 		
 		int userID = (int) mapUserData.get("userID");
-		int itemID = (int) mapUserData.get("itemID");
+		int itemID = (int) mapUserData.get("productID");
 
 		CallableStatement getItem = connection.prepareCall("{call getItemInfo(?)}");
 		getItem.setInt(1, itemID);
@@ -66,9 +66,10 @@ public class AddItemToCartCmd extends Command implements Runnable {
 						new Document("$set", new Document("totalPrice", totalPrice + itemPrice)));
 			}
 			cart = MongoDBUtils.getUserCart(mongoDB, userID);
-			return makeJSONResponseEnvelope(200, null, new StringBuffer(cart.toJson()));
+			return new StringBuffer("[").append(new StringBuffer(cart.toJson())).append("]");
 		}
-		return makeJSONResponseEnvelope(404, null, new StringBuffer("{\"error\":\"ItemNotFound\"}"));
+		return new StringBuffer("[").append("{\"error\":\"msh la2y item\"}").append("]");
+		
 	}
 
 }
