@@ -8,12 +8,11 @@ import commands.Command;
 
 public class SendMessageCmd extends Command implements Runnable {
 
-	@Override
-	public StringBuffer execute(Connection connection, Map<String, Object> mapUserData) throws Exception {
-		// TODO Auto-generated method stub
+	public StringBuffer execute(Connection connection, Map<String, Object> mapUserData)
+			throws Exception {
 		
 		CallableStatement sqlProc;
-		StringBuffer strbufResult = null, strbufResponseJSON;
+		StringBuffer strbufResult = new StringBuffer("");
 		int senderID, receiverID;
 		String message;
 		
@@ -29,9 +28,9 @@ public class SendMessageCmd extends Command implements Runnable {
 		sqlProc.setInt(1, senderID);
 		sqlProc.setInt(2, receiverID);
 		sqlProc.setString(3, message);
-		sqlProc.execute();
+		boolean executed = sqlProc.execute();
 		System.out.println("procedure executed");
-		strbufResult = makeJSONResponseEnvelope(3, null, null);
+		strbufResult.append(changeToJSONFormat(executed+""));
 		sqlProc.close();
 		return strbufResult;
 	}

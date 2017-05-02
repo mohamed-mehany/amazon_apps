@@ -34,6 +34,9 @@ DROP PROCEDURE IF EXISTS update_product;
 
 DROP PROCEDURE IF EXISTS send_message;
 DROP PROCEDURE IF EXISTS view_messages;
+DROP PROCEDURE IF EXISTS view_single_message;
+DROP PROCEDURE IF EXISTS view_all_messages_between_2_users;
+
 
 DROP PROCEDURE IF EXISTS get_total_rating;
 
@@ -694,6 +697,34 @@ END //
 DELIMITER ;
 
 -- call mydb.view_messages(2);
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`view_single_message` (IN receiver_id INT)
+BEGIN
+   SELECT message.text , user.name , user.id
+    FROM message
+        INNER JOIN user 
+      ON user.id = message.sender_id 
+     WHERE message.receiver_id = receiver_id AND message.id =(SELECT MAX(message.id) FROM message); 
+END // 
+DELIMITER ;
+
+-- call mydb.view_single_message(2);
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`view_all_messages_between_2_users` (IN receiver_id INT , IN sender_id INT)
+BEGIN
+   SELECT message.text , user.name , user.id
+    FROM message
+        INNER JOIN user 
+      ON user.id = message.sender_id 
+     WHERE message.receiver_id = receiver_id AND message.sender_id=sender_id; 
+END //
+DELIMITER ;
+
+-- call mydb.view_all_messages_between_2_users(1,3);
+
+
 
 
 CREATE PROCEDURE `mydb`.`get_user_reviews` (IN user_id INT)

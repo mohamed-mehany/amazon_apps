@@ -5,7 +5,6 @@
 		"sortProducts": "SortProductsCmd",
 		"viewPriceInCart": "ViewPriceOfProductsCartCmd"
 	},		
-
 	"commands.user": {
 		"addUserSimple": "AddUserSimpleCmd",
 		"attemplogin": "AttemptLoginCmd"
@@ -28,7 +27,9 @@
 	},
 	"commands.message": {
 		"sendMessage": "SendMessageCmd",
-		"viewMessages": "ViewMessagesCmd"		
+		"viewMessages": "ViewMessagesCmd",
+		"viewSingleMessage": "ViewSingleMessageCmd",
+		"viewAllMessage": "ViewAllMessagesBetween2UsersCmd"
 	},
 	"commands.cart": {
 		"AddItemToCart": "AddItemToCartCmd",
