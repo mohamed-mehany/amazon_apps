@@ -45,5 +45,9 @@
 		"ViewCart": "ViewCartCmd",
 		"ViewTotalPrice": "ViewTotalPriceCmd",
 		"CreateBankingInfo": "CreateBankingInfoCmd"
+	},
+	"commands.vendor": {
+		"AddProduct": "AddProductCmd",
+		"DeleteProduct": "DeleteProductCmd"
 	}
 }

@@ -55,6 +55,9 @@ DROP PROCEDURE IF EXISTS all_products;
 DROP PROCEDURE IF EXISTS sort_products_price;
 
 
+DROP PROCEDURE IF EXISTS add_product ;
+DROP PROCEDURE IF EXISTS delete_product;
+
 DELIMITER //
 CREATE PROCEDURE `view_ratings_of_sellers_product` (IN product_id INT, IN seller_id INT)
 BEGIN
@@ -145,129 +148,6 @@ BEGIN
       );
     Select * from user;
 END //
-
-DELIMITER //
--- DROP procedure if exists add_product ;
-CREATE PROCEDURE add_product
-  (
-    IN name varchar(63),
-    IN vendor_id INT,
-    IN description varchar(63),
-    IN department_id int,
-    IN size int,
-    IN stock int,
-    IN colour varchar(63),
-    IN price double,
-    IN image_path varchar(255)
-  )
-  BEGIN
-
-    INSERT INTO product
-      (
-        name,
-        description,
-        created_at,
-        vendor_id
-      )
-        VALUES
-        (
-          name,
-          description,
-          now(),
-          vendor_id
-        );
-
-    SELECT @prod_id:= product.id FROM product
-    WHERE product.name= name AND product.description = description ;
-
-    INSERT INTO item
-        ( size,
-          stock,
-          colour,
-          price,
-          created_at,
-          product_id
-        )
-    VALUES
-        (
-          size,
-          stock,
-          colour,
-          price,
-          now(),
-          @prod_id
-        );
-    INSERT INTO product_has_department
-    VALUES
-        (
-          @prod_id,
-          department_id
-        );
-
-    SELECT @it_id:= item.id   FROM item
-    WHERE item.product_id = @prod_id
-    AND item.price = price
-    AND item.size = size
-    AND item.stock = stock
-    AND item.colour = colour ;
-
-   INSERT INTO image
-      (
-        file_path,
-        created_at,
-        item_id,
-        item_product_id,
-        item_product_vendor_id,
-        user_id
-      )
-    VALUES
-      (
-        image_path,
-        now(),
-        @it_id,
-        @prod_id,
-        vendor_id,
-        vendor_id
-      );
-END
-//
-
-
-
-
--- drop procedure delete_product ;
-DELIMITER //
-
-CREATE PROCEDURE delete_product
-  (
-    IN product_id int
-  )
-
-  BEGIN
-
-    DELETE FROM image
-    WHERE image.item_product_id = product_id ;
-
-    DELETE FROM rating
-    WHERE rating.product_id = product_id ;
-
-    DELETE FROM order_has_item
-    WHERE order_has_item.item_product_id = product_id ;
-
-    DELETE FROM user_has_item
-    WHERE user_has_item.item_product_id = product_id;
-
-    DELETE FROM product_has_department
-    WHERE product_has_department.product_id = product_id ;
-
-    DELETE FROM item
-    WHERE item.product_id = product_id ;
-
-    DELETE FROM product
-    WHERE product.id = product_id ;
-
-END //
-
 
 -- -- call delete_product(5) ;
 
@@ -667,7 +547,9 @@ begin
     ON product.id=item.product_id
     INNER JOIN image
     ON item.id=image.item_id;
-
+    end //
+DELIMITER ;
+DELIMITER //
 CREATE PROCEDURE `mydb`.`send_message` (IN sender_id INT,IN receiver_id INT,IN text longtext )
 BEGIN
   INSERT INTO message
@@ -852,7 +734,7 @@ BEGIN
          )
     VALUES
          (user_id, banking_info_id);
-	SET @order_id = LAST_INSERT_ID();
+  SET @order_id = LAST_INSERT_ID();
     SELECT @order_id;
 END //
 
@@ -890,3 +772,126 @@ DELIMITER //
 
  END //
  DELIMITER ;
+
+ -- -- DROP  procedure add_product  ;
+DELIMITER //
+CREATE PROCEDURE add_product 
+  (
+    IN name varchar(63),
+    IN vendor_id1 INT,
+    IN description varchar(63),
+    IN department_id int,
+    IN size int,
+    IN stock int,
+    IN colour varchar(63),
+    IN price double,
+    IN image_path varchar(255)
+  )
+  BEGIN
+
+    INSERT INTO product
+      (
+        name, 
+        description,
+        created_at,
+        vendor_id
+      )
+        VALUES 
+        (
+          name, 
+          description,
+          now(),
+          vendor_id1
+        );
+        
+     SELECT @prod_id:= product.id FROM product 
+     WHERE product.name= name AND product.description = description ;
+   
+    INSERT INTO item 
+        ( size, 
+          stock,
+          colour,
+          price,
+          created_at,
+          product_id
+        )
+    VALUES
+        (
+          size,
+          stock,
+          colour,
+          price,
+          now(),
+          @prod_id
+        );
+
+  INSERT INTO product_has_department
+    VALUES 
+        (
+          @prod_id,
+          department_id,
+          now(),
+          now()
+        );
+    
+  SELECT @it_id:= item.id   FROM item 
+    WHERE item.product_id = @prod_id 
+     AND item.price = price 
+     AND item.size = size
+  AND item.stock = stock
+    AND item.colour = colour ;
+ 
+   INSERT INTO image 
+      ( 
+        file, 
+        item_id, 
+        item_product_id, 
+        user_id
+      )
+    VALUES 
+      ( 
+        image_path,
+        @it_id,
+        @prod_id,
+        vendor_id1
+      );
+END //
+DELIMITER ;  
+           
+
+  
+ 
+-- -- drop procedure delete_product ;
+DELIMITER //
+ 
+CREATE PROCEDURE delete_product
+  (
+    IN product_id int
+  )
+    
+  BEGIN
+    
+    DELETE FROM image 
+    WHERE image.item_product_id = product_id ;
+ 
+    DELETE FROM rating 
+    WHERE rating.product_id = product_id ;
+    
+    DELETE FROM order_has_item
+    WHERE order_has_item.item_product_id = product_id ;
+  
+    DELETE FROM user_has_item 
+    WHERE user_has_item.item_product_id = product_id;
+    
+    DELETE FROM product_has_department
+    WHERE product_has_department.product_id = product_id ;
+    
+    DELETE FROM item
+    WHERE item.product_id = product_id ;
+    
+    DELETE FROM product
+    WHERE product.id = product_id ;
+    
+END //
+DELIMITER ;  
+

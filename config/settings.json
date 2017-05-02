@@ -1,5 +1,5 @@
 {
-	"allowedCommands": ["commands.search", "commands.product", "commands.review", "commands.message", "commands.cart", "commands.review", "commands.user"],
+	"allowedCommands": ["commands.search", "commands.product", "commands.review", "commands.message", "commands.cart", "commands.review", "commands.user", "commands.vendor"],
     "dbConfig": {
         "dbName": "mydb",
         "dbUserName": "root",

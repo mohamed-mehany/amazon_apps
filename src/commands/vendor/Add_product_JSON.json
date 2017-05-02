@@ -1,0 +1,71 @@
+//Products
+{
+"data": {
+	"name":"iphone",
+	"vendor_id": 1,
+	"description": "mobile qawy",
+	"department_id": 1,
+	"size":2,
+	"stock":2,
+	"colour": "Black",
+	"price":7100,
+	"image_path":"Home"
+},
+"sessionID": "97",
+"command": "AddProduct",
+"receivingQueue":"mohsen",
+"requestId": "2"
+}
+
+{
+"data": {
+	"name":"Lenovo",
+	"vendor_id": 1,
+	"description": "It is a good product",
+	"department_id": 2,
+	"size":2,
+	"stock":2,
+	"colour": "Blue",
+	"price":3100,
+	"image_path":"Home_1"
+},
+"sessionID": "97",
+"command": "AddProduct",
+"receivingQueue":"mohsen",
+"requestId": "2"
+}
+
+{
+"data": {
+	"name":"Samsung",
+	"vendor_id": 1,
+	"description": "It is a very good product",
+	"department_id": 1,
+	"size":2,
+	"stock":2,
+	"colour": "Navy Blue",
+	"price":4100,
+	"image_path":"Home_2"
+},
+"sessionID": "97",
+"command": "AddProduct",
+"receivingQueue":"mohsen",
+"requestId": "2"
+}
+{
+"data": {
+	"name":"Sony",
+	"vendor_id": 1,
+	"description": "It is a great product",
+	"department_id": 1,
+	"size":4,
+	"stock":3,
+	"colour": "Dark Blue",
+	"price":4170,
+	"image_path":"Home_4"
+},
+"sessionID": "97",
+"command": "AddProduct",
+"receivingQueue":"mohsen",
+"requestId": "2"
+}
