@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`user` (
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `address` VARCHAR(255) NULL,
   `date_of_birth` DATE NULL,
-  `token` VARCHAR(255) NOT NULL,
+  `token` VARCHAR(255) NULL,
   `gender` VARCHAR(10) NOT NULL,
   `id` INT NOT NULL AUTO_INCREMENT,
   `updated_at` TIMESTAMP NULL,

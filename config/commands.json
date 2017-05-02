@@ -7,7 +7,13 @@
 	},		
 	"commands.user": {
 		"addUserSimple": "AddUserSimpleCmd",
-		"attemplogin": "AttemptLoginCmd"
+		"attemplogin": "AttemptLoginCmd",
+		"createUser":"CreateUserCmd",
+		"createVendor":"CreateVendorCmd",
+		"editProfileInfo":"EditProfileInfoCmd",
+		"login":"LoginCmd",
+		"logout":"LogoutCmd",
+		"viewUserProfile":"ViewUserProfileCmd"		
 	},
     "commands.review": {
         "createRating": "CreateRatingCmd",
