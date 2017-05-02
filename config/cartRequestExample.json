@@ -1,4 +1,5 @@
 // addItemToCart
+/Carts
 {
   "data": {
       "userID": 1,
@@ -11,6 +12,7 @@
 }
 
 // RemoveItemFromCart
+/Carts
 {
   "data": {
       "userID": 1,
@@ -23,6 +25,7 @@
 }
 
 // ChangeItemQuantity
+/Carts
 {
   "data": {
       "userID": 1,
@@ -36,6 +39,7 @@
 }
 
 // ViewCart
+/Carts
 {
   "data": {
       "userID": 1
@@ -47,6 +51,7 @@
 }
 
 // ViewTotalPrice
+/Carts
 {
   "data": {
       "userID": 1
@@ -58,6 +63,7 @@
 }
 
 // ProceedToPayment
+/Carts
 {
   "data": {
       "userID": 1,
@@ -73,6 +79,7 @@
 }
 
 // ProceedToPayment
+/Carts
 {
   "data": {
       "userID": 1,
