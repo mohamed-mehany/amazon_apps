@@ -33,6 +33,7 @@ public class ViewDeliveredOrdersCmd extends Command implements Runnable {
 			boolean hadR = sqlProc.execute();
 			System.out.println("Boolean : "+ hadR);
 			ResultSet nSQLResult = sqlProc.getResultSet();
+   			strbufResult.append("[");
 			while (nSQLResult.next()) {
 		       			JsonObject o = new JsonObject();
 		       			o.add("id", nSQLResult.getString(1));
@@ -42,8 +43,10 @@ public class ViewDeliveredOrdersCmd extends Command implements Runnable {
 		       			o.add("user_id", nSQLResult.getString(5));
 		       			o.add("banking_info_id", nSQLResult.getString(6));
 		       			o.add("updated_at", nSQLResult.getString(7));
-		       			strbufResult.append(o);
+		       			strbufResult.append(o+", ");
 	          }
+   			strbufResult.delete(strbufResult.length()-2, strbufResult.length());
+   			strbufResult.append("]");
 			nSQLResult.close();
 			sqlProc.close();
 			

@@ -55,6 +55,7 @@ public class ViewUserOrdersCmd extends Command implements Runnable {
 			System.out.println("Boolean : "+ hadR);
 			Map<String, Object> mapResult = new HashMap<String, Object>( );
 			ResultSet nSQLResult = sqlProc.getResultSet();
+   			strbufResult.append("[");
 			while (nSQLResult.next()) {
 					System.out.println(nSQLResult.toString());
 		               System.out.println(nSQLResult.getString(1));
@@ -68,11 +69,13 @@ public class ViewUserOrdersCmd extends Command implements Runnable {
 //		       			o.add("user_id", nSQLResult.getString(1));
 //		       			o.add("banking_info_id", nSQLResult.getString(1));
 //		       			o.add("updated_at", nSQLResult.getString(1));
-		       			strbufResult.append(o);
+		       			strbufResult.append(o+", ");
 //		               strbufResult.append(nSQLResult.getString(1));
 //	               System.out.println(nSQLResult.getString("delivery_status"));
 //	               mapResult.put( "userID", nSQLResult.getString("delivery_status") );
 	          }
+   			strbufResult.delete(strbufResult.length()-2, strbufResult.length());
+   			strbufResult.append("]");
 			nSQLResult.close();
 			sqlProc.close();
 //			if( !nSQLResult.isLast() ){
