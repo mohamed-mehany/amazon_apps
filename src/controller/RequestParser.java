@@ -28,6 +28,7 @@ public class RequestParser implements Runnable {
 	public void run() {
 		try {
 			// CALL DISPATCHER
+
 			HttpContent cc = (HttpContent) (_clientHandle._httpRequest);
 			ByteBuf content = cc.content();
 			JsonObject body = JsonObject.readFrom(content.toString(CharsetUtil.UTF_8));

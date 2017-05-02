@@ -16,24 +16,22 @@ public class CreateRatingCmd extends Command implements Runnable {
 			throws Exception {
 
 		CallableStatement createReview;
-		StringBuffer strbufResult = null, strbufResponseJSON;
+		StringBuffer strbufResult = new StringBuffer("");
 		int user_id, product_id, value;
 		String review;
-		int nSQLResult;
-
+		
 		product_id = ((Integer) mapUserData.get("product_id"));
 		value = ((Integer) mapUserData.get("value"));
 		review = (String) mapUserData.get("review");
 		user_id = (Integer) mapUserData.get("user_id");
 		
 		createReview = connection.prepareCall("{call create_review"+"(?,?,?,?)"+"}");
-		createReview.setInt(1,value);
-		createReview.setInt(2,user_id);
-		createReview.setInt(3,product_id);
-		createReview.setString(4,review);
-		createReview.execute();
-
-		strbufResult = makeJSONResponseEnvelope(200, null, null);
+		createReview.setInt(1, value);
+		createReview.setInt(2, user_id);
+		createReview.setInt(3, product_id);
+		createReview.setString(4, review);
+		Boolean executed = createReview.execute();
+		strbufResult.append(changeToJSONFormat(executed+""));
 		createReview.close();
 
 		return strbufResult;

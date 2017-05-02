@@ -173,7 +173,12 @@ public class Dispatcher {
 				_htblConfig.get("dbName"),
 				_htblConfig.get("dbUserName"),
 				_htblConfig.get("dbPassword"));
-		loadElasticSearch();
+		try {
+			loadElasticSearch();
+		}catch(Exception e) {
+			System.out.println("could not run elastic search check the config file");
+		}
+		
 		loadMongo(_htblConfig.get("mongoDBName"), _htblConfig.get("mongoUser"), _htblConfig.get("mongoPassword"),
 						_htblConfig.get("dbHostName"), _htblConfig.get("mongoPort"));
 		loadThreadPool();

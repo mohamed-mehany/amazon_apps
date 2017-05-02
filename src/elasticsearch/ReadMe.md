@@ -17,7 +17,7 @@
     
 ```
 
-### Get the cluster name
+### Get the cluster name <using browser>
 ```
 	http://localhost:9200/_cluster/state?pretty
 ```

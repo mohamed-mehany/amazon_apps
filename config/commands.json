@@ -1,7 +1,21 @@
 {
+
+	"commands.product": {
+		"indexProducts": "IndexProductsCmd",
+		"sortProducts": "SortProductsCmd",
+		"viewPriceInCart": "ViewPriceOfProductsCartCmd"
+	},		
+
 	"commands.user": {
 		"addUserSimple": "AddUserSimpleCmd",
 		"attemplogin": "AttemptLoginCmd"
+	},
+    "commands.review": {
+        "createRating": "CreateRatingCmd",
+        "createValueOnlyRating": "CreateValueOnlyRatingCmd",
+        "getProductRatings":"GetProductRatingsCmd",
+        "getTotalRating":"GetTotalRatingCmd",
+        "getUserRating":"GetUserRatingsCmd"
 	},
 	"commands.search": {
 		"searchOrderByItemName": "SearchOrderByItemNameCmd"	,
