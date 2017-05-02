@@ -13,9 +13,8 @@ public class GetUserRatingsCmd extends Command implements Runnable {
 			throws Exception {
 
 		CallableStatement getRatings;
-		StringBuffer strbufResult = new StringBuffer(""), strbufResponseJSON;
+		StringBuffer strbufResult = new StringBuffer("");
 		int user_id;
-		int nSQLResult;
 
 		user_id = (Integer) mapUserData.get("user_id");
 		
