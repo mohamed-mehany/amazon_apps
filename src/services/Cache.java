@@ -48,14 +48,14 @@ public class Cache {
 	}
 
 	public static boolean sessionExists(String strSessionID) {
-		if (strSessionID == null)
-			return false;
-		System.err.println(" you passed " + strSessionID + " to Cache.sessionExists ");
-		System.err.println(" checking existance " + _htblCache.get(strSessionID));
-		if (_htblCache.get(strSessionID) == null) {
-			// TODO MAKE SURE CACHE CONTAINS SESSIONID AND RETURN FALSE HERE 
-			return true;
-		}
+//		if (strSessionID == null)
+//			return false;
+//		System.err.println(" you passed " + strSessionID + " to Cache.sessionExists ");
+//		System.err.println(" checking existance " + _htblCache.get(strSessionID));
+//		if (_htblCache.get(strSessionID) == null) {
+//			// TODO MAKE SURE CACHE CONTAINS SESSIONID AND RETURN FALSE HERE 
+//			return true;
+//		}
 
 		return true;
 	}

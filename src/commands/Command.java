@@ -3,16 +3,21 @@ package commands;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.mysql.jdbc.exceptions.MySQLDataException;
 import com.zaxxer.hikari.HikariDataSource;
 
 import controller.ClientHandle;
 import controller.ClientRequest;
 import controller.ResponseCodes;
+import elasticsearch.ReviewSearch;
 
-public abstract class Command {
+public abstract class 	Command {
 
 	protected HikariDataSource _hikariDataSource;
 	protected ClientHandle _clientHandle;
@@ -24,8 +29,7 @@ public abstract class Command {
 
 	}
 
-	public void init(HikariDataSource hikariDataSource, ClientHandle clientHandle,
-			ClientRequest clientRequest) {
+	public void init(HikariDataSource hikariDataSource, ClientHandle clientHandle, ClientRequest clientRequest) {
 		_hikariDataSource = hikariDataSource;
 		_clientRequest = clientRequest;
 		_clientHandle = clientHandle;
@@ -61,8 +65,8 @@ public abstract class Command {
 		}
 	}
 
-	protected StringBuffer makeJSONResponseEnvelope(int nResponse,
-			StringBuffer strbufRequestData, StringBuffer strbufResponseData) {
+	protected StringBuffer makeJSONResponseEnvelope(int nResponse, StringBuffer strbufRequestData,
+			StringBuffer strbufResponseData) {
 		StringBuffer strbufJSON;
 		String strStatusMsg;
 		String strData = "";
@@ -96,14 +100,13 @@ public abstract class Command {
 		return strbufJSON;
 	}
 
-	protected StringBuffer serializeRequestDatatoJSON(ArrayList arrFieldstoKeep)
-			throws Exception {
+	protected StringBuffer serializeRequestDatatoJSON(ArrayList arrFieldstoKeep) throws Exception {
 
 		return serializeMaptoJSON(_clientRequest.getData(), arrFieldstoKeep);
 	}
 
-	protected StringBuffer serializeResultSettoJSON(ResultSet resultSet,
-			ArrayList arrColstoKeep, int nMaxSize) throws Exception {
+	protected StringBuffer serializeResultSettoJSON(ResultSet resultSet, ArrayList arrColstoKeep, int nMaxSize)
+			throws Exception {
 
 		StringBuffer strbufJSON;
 		int nCount;
@@ -171,22 +174,41 @@ public abstract class Command {
 
 		return strbufJSON;
 	}
+	
+	protected StringBuffer serializeArrayMaptoJSON(ArrayList<Map<String, Object>> list) throws Exception {
 
-	protected StringBuffer serializeMaptoJSON(Map<String, Object> map,
-			ArrayList arrFieldstoKeep) {
+		StringBuffer strbufJSON;
+		strbufJSON = new StringBuffer();
+		strbufJSON.append("[ ");
+
+		for(Map<String, Object> item : list) {
+			strbufJSON.append("{");
+			strbufJSON.append(serializeMaptoJSON(item, null));
+			if (strbufJSON.charAt(strbufJSON.length() - 1) == ',')
+				strbufJSON.setLength(strbufJSON.length() - 1);
+			strbufJSON.append("},");
+		}
+
+		if (strbufJSON.charAt(strbufJSON.length() - 1) == ',')
+			strbufJSON.setLength(strbufJSON.length() - 1);
+
+		strbufJSON.append("]");
+
+		return strbufJSON;
+	}
+
+	protected StringBuffer serializeMaptoJSON(Map<String, Object> map, ArrayList arrFieldstoKeep) {
 
 		StringBuffer strbufData;
 
 		strbufData = new StringBuffer();
 		if (arrFieldstoKeep == null) {
 			for (Map.Entry<String, Object> entry : map.entrySet())
-				strbufData.append("\"" + entry.getKey() + "\":\""
-						+ entry.getValue().toString() + "\",");
+				strbufData.append("\"" + entry.getKey() + "\":\"" + entry.getValue().toString() + "\",");
 		} else {
 			for (Map.Entry<String, Object> entry : map.entrySet()) {
 				if (arrFieldstoKeep.contains(entry.getKey()))
-					strbufData.append("\"" + entry.getKey() + "\":\""
-							+ entry.getValue().toString() + "\",");
+					strbufData.append("\"" + entry.getKey() + "\":\"" + entry.getValue().toString() + "\",");
 			}
 		}
 
@@ -198,4 +220,30 @@ public abstract class Command {
 
 	public abstract StringBuffer execute(Connection connection,
 			Map<String, Object> mapUserData) throws Exception;
+
+	public String changeToJSONFormat(ResultSet r) throws SQLException {
+		ResultSetMetaData rsmd = r.getMetaData();
+		int columnsNumber = rsmd.getColumnCount();
+		JsonArray json = new JsonArray();
+		while (r.next()) {
+			JsonObject o = new JsonObject();
+			for (int i = 1; i <= columnsNumber; i++) {
+				if(r.getString(i)==null)
+					o.add(rsmd.getColumnName(i),"null");
+				else
+					o.add(rsmd.getColumnName(i), r.getString(i));
+			}
+			json.add(o);
+		}
+		r.close();
+		return json.toString();
+	}
+
+	public String changeToJSONFormat(String s){
+		JsonArray json = new JsonArray();
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.add("result", s);
+		json.add(jsonObject);
+		return json.toString();
+	}
 }

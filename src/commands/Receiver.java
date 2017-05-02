@@ -7,6 +7,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -14,11 +16,15 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import io.netty.util.CharsetUtil;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 
 public class Receiver {
 
@@ -26,22 +32,24 @@ public class Receiver {
 		Receiver receive =  null;
 		public void run() {
 
-			receive = new Receiver("mohsen", "192.168.1.144",
+			receive = new Receiver("mohsen", "localhost",
 					"EXCHANGE_SERVER1");
 			receive.Receive();
 		}
 	}
 
-	String tag;
-	String exchange_name;
-	String server_ip;
-	Channel channel = null;
-	Connection connection;
-	String queueName;
-	ConnectionFactory factory;
+	public String tag;
+	public String exchange_name;
+	public String server_ip;
+	public Channel channel = null;
+	public Connection connection;
+	public String queueName;
+	public ConnectionFactory factory;
+	public  String key;
 	public Receiver(String tag, String ip, String key) {
 		this.tag = tag;
 		server_ip = ip;
+		this.key = key;
 		getExchange(key);
 	}
 
@@ -106,9 +114,9 @@ public class Receiver {
 										   Envelope envelope, AMQP.BasicProperties properties,
 										   byte[] body) throws IOException {
 					String message = new String(body, "UTF-8");
-					System.out.println(" [x] Received '"
+					System.out.println(tag + " [x] Received '"
 							+ envelope.getRoutingKey() + "':'" + message + "'");
-				sendToNetty(message);
+					sendToNetty(message);
 				}
 			};
 			try {
@@ -122,24 +130,42 @@ public class Receiver {
 	public void sendToNetty(String message){
 		HttpClient httpClient = HttpClientBuilder.create().build();
 		try {
-
+			//send request to netty
 			HttpPost request = new HttpPost("http://localhost:3030");
 			StringEntity params =new StringEntity(message);
+			JsonObject result = new JsonObject();
 			request.addHeader("content-type", "text/plain");
 			request.setEntity(params);
-			HttpResponse response = httpClient.execute(request);
-
+			HttpEntity requestEntity = request.getEntity();
+			String requestString = EntityUtils.toString(requestEntity, "UTF-8");
+			JsonObject requestJson = JsonObject.readFrom(requestString);
+			String receivingQueue = requestJson.get("receivingQueue").asString();
+			//get Response from netty
+			HttpResponse httpResponse = httpClient.execute(request);
+			HttpEntity entity = httpResponse.getEntity();
+			String responseString = EntityUtils.toString(entity);
+			//put response in jsonArray
+			JsonArray responseJson = JsonArray.readFrom(responseString);
+			//add it to the result Json
+			result.add("data",responseJson);
+			//add id to json object
+			result.add("id", requestJson.get("requestId"));
+			//send to queue
+			Sender sender = new Sender(receivingQueue, server_ip, "EXCHANGE_SERVER1");
+			sender.send(result.toString());
 		}catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
 			System.out.println("Success! Sent to Netty.");
 		}
 	}
-//	public static void main(String[] argv) throws Exception {
-//		Timer timer = new Timer();
-//		timer.schedule(new SayHello(), 0, 500);
-//		System.out.println("STARTING ");
-//
-//
-//	}
+
+
+	public static void main(String[] argv) throws Exception {
+		Timer timer = new Timer();
+		timer.schedule(new SayHello(), 0, 500);
+		System.out.println("STARTING ");
+
+
+	}
 }

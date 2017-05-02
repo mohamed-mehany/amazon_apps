@@ -11,14 +11,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/boon-0.4.jar"/>
-	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/HikariCP-java6-2.3.1.jar"/>
-	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/javassist.jar"/>
-	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/netty-all-5.0.0.Alpha2-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/postgresql-9.3-1102.jdbc41.jar"/>
-	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/slf4j-api-1.7.10.jar"/>
-	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/slf4j-jdk14-1.7.10.jar"/>
-	<classpathentry kind="lib" path="/home/abkreno/workspace/Netty-Starter/libs/minimal-json-0.9.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
