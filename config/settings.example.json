@@ -5,6 +5,15 @@
         "dbUserName": "DB_UNAME",
         "dbPassword": "DB_PASS",
         "dbPortNumber": "5432",
-	"dbHostName": "127.0.0.1"
+        "mongoDBName": "Amazon",
+        "mongoUser": "amazonUser",
+        "mongoPassword": "123456",
+        "mongoPort": "27017"
+    },
+    "elasticConfig": {
+    	"elasticHost": "localhost",
+    	"elasticPort": "9300",
+    	"elasticIndexName": "amazon",
+        "elasticClusterName": "elasticsearch_ebrahim-elgaml" 
     }
 }

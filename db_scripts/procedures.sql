@@ -32,11 +32,33 @@ DROP PROCEDURE IF EXISTS search_vendor;
 DROP PROCEDURE IF EXISTS search_product;
 DROP PROCEDURE IF EXISTS update_product;
 
+DROP PROCEDURE IF EXISTS send_message;
+DROP PROCEDURE IF EXISTS view_messages;
+DROP PROCEDURE IF EXISTS view_single_message;
+DROP PROCEDURE IF EXISTS view_all_messages_between_2_users;
+
+
+DROP PROCEDURE IF EXISTS get_total_rating;
+
+DROP PROCEDURE IF EXISTS create_banking_info;
+DROP PROCEDURE IF EXISTS create_order;
+DROP PROCEDURE IF EXISTS add_item_to_order;
+DROP PROCEDURE IF EXISTS get_banking_info;
+
+
+
+
+
+DROP PROCEDURE IF EXISTS view_price_products_cart;
+DROP PROCEDURE IF EXISTS all_products;
+
+DROP PROCEDURE IF EXISTS sort_products_price;
+
 
 DELIMITER //
 CREATE PROCEDURE `view_ratings_of_sellers_product` (IN product_id INT, IN seller_id INT)
 BEGIN
-  SELECT rating.value, user.name, rating.create_time
+  SELECT rating.value, user.name, rating.created_at
     FROM rating
     INNER JOIN product
     ON rating.product_id = product.id
@@ -129,7 +151,7 @@ DELIMITER //
 CREATE PROCEDURE add_product
   (
     IN name varchar(63),
-    IN vendor_id1 INT,
+    IN vendor_id INT,
     IN description varchar(63),
     IN department_id int,
     IN size int,
@@ -144,15 +166,15 @@ CREATE PROCEDURE add_product
       (
         name,
         description,
-        create_time,
-        vendor_id1
+        created_at,
+        vendor_id
       )
         VALUES
         (
           name,
           description,
           now(),
-          vendor_id1
+          vendor_id
         );
 
     SELECT @prod_id:= product.id FROM product
@@ -163,7 +185,7 @@ CREATE PROCEDURE add_product
           stock,
           colour,
           price,
-          create_time,
+          created_at,
           product_id
         )
     VALUES
@@ -192,10 +214,10 @@ CREATE PROCEDURE add_product
    INSERT INTO image
       (
         file_path,
-        create_time,
+        created_at,
         item_id,
         item_product_id,
-        item_product_vendor_id1,
+        item_product_vendor_id,
         user_id
       )
     VALUES
@@ -204,8 +226,8 @@ CREATE PROCEDURE add_product
         now(),
         @it_id,
         @prod_id,
-        vendor_id1,
-        vendor_id1
+        vendor_id,
+        vendor_id
       );
 END
 //
@@ -306,6 +328,8 @@ END
 
 
 
+
+
 DELIMITER //
 
   CREATE PROCEDURE view_orders
@@ -364,7 +388,7 @@ BEGIN
            value                  ,
            user_id               ,
            product_id          ,
-           create_time
+           created_at
          )
     VALUES
          (ratingValue, userId, productId, now());
@@ -414,9 +438,9 @@ DELIMITER //
  CREATE PROCEDURE `mydb`.`getItemInfo` (IN itemID INT)
  Begin
  SELECT
-      p.name, p.description, i.size, i.colour, i.price,   ( Select AVG(r.value)
-		FROM rating r
-		WHERE r.product_id = p.id) as rating
+      p.name, p.description, i.size, i.stock,  i.colour, i.price, i.created_at, i.updated_at, i.product_id , ( Select AVG(r.value)
+    FROM rating r
+    WHERE r.product_id = p.id) as rating
  FROM
    item i, product p
 where i.product_id = itemID and p.id = itemID;
@@ -511,67 +535,67 @@ DELIMITER //
  Begin
  if(item_color is NULL and item_size is NULL)
  then
-	 SELECT
-		  p.name, p.description, i.size, i.colour, i.price
-	 FROM
-	   item i, product p
-	where i.product_id = itemID and p.id = itemID;
+   SELECT
+      p.name, p.description, i.size, i.colour, i.price
+   FROM
+     item i, product p
+  where i.product_id = itemID and p.id = itemID;
 elseif (item_color is NULL)
 then
  SELECT
-		  p.name, p.description, i.size, i.colour, i.price
-	 FROM
-	   item i, product p
-	where i.product_id = itemID and p.id = itemID and i.size = item_size;
+      p.name, p.description, i.size, i.colour, i.price
+   FROM
+     item i, product p
+  where i.product_id = itemID and p.id = itemID and i.size = item_size;
 elseif(item_size is NULL)
 then
 SELECT
-		  p.name, p.description, i.size, i.colour, i.price
-	 FROM
-	   item i, product p
-	where i.product_id = itemID and p.id = itemID and i.colour = item_color;
+      p.name, p.description, i.size, i.colour, i.price
+   FROM
+     item i, product p
+  where i.product_id = itemID and p.id = itemID and i.colour = item_color;
 end if;
  END //
  DELIMITER ;
 
  DELIMITER //
-	CREATE PROCEDURE `mydb`.`update_product`(
-	 n_id int,
-	 n_name varchar(63),
-	 n_desc varchar(255),
-	 n_v_id int
-	)
-	BEGIN
-		UPDATE product
-		SET
-	         name = n_name,
-	         description = n_desc,
-	         vendor_id1 = n_v_id
-		WHERE
-		id = n_id;
-	END //
-	DELIMITER ;
+  CREATE PROCEDURE `mydb`.`update_product`(
+   n_id int,
+   n_name varchar(63),
+   n_desc varchar(255),
+   n_v_id int
+  )
+  BEGIN
+    UPDATE product
+    SET
+           name = n_name,
+           description = n_desc,
+           vendor_id1 = n_v_id
+    WHERE
+    id = n_id;
+  END //
+  DELIMITER ;
 
 DELIMITER //
-	CREATE PROCEDURE `mydb`.`view_user`(
-	 n_id int
-	)
-	BEGIN
-	 select * from user where id = n_id;
-	END //
-	DELIMITER ;
+  CREATE PROCEDURE `mydb`.`view_user`(
+   n_id int
+  )
+  BEGIN
+   select * from user where id = n_id;
+  END //
+  DELIMITER ;
 
 DELIMITER //
-	CREATE PROCEDURE `mydb`.`view_product_rating`(
-	u_id int,
+  CREATE PROCEDURE `mydb`.`view_product_rating`(
+  u_id int,
     p_id int
-	)
-	BEGIN
-		select value
-		from rating inner join product on rating.product_id = product.id
-		where product.vendor_id1 = u_id
-	    and product.id = p_id;
-	END //
+  )
+  BEGIN
+    select value
+    from rating inner join product on rating.product_id = product.id
+    where product.vendor_id1 = u_id
+      and product.id = p_id;
+  END //
  DELIMITER ;
 
 DELIMITER //
@@ -617,12 +641,125 @@ DELIMITER ;
 -- call mydb.filterItemsByFeature(1, NULL, 25);
 
 DELIMITER //
-CREATE PROCEDURE `mydb`.`get_user_reviews` (IN user_id INT)
-begin
-  SELECT * FROM rating r WHERE r.user_id = user_id;
+
+
+CREATE PROCEDURE `mydb`.`view_price_products_cart` (IN product_id INT, IN quantity INT)
+BEGIN
+  -- --DECLARE result DOUBLE;
+  SELECT (item.price)*quantity
+    FROM product
+    INNER JOIN item
+    ON item.product_id = product.id
+    WHERE product.id= product_id;
+    -- --set res=result;
 end //
 
 DELIMITER ;
+
+-- --call mydb.view_price_products_cart(1, 2);
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`all_products` ()
+begin
+  SELECT product.name, item.price,item.colour,image.file
+    FROM product
+    INNER JOIN item
+    ON product.id=item.product_id
+    INNER JOIN image
+    ON item.id=image.item_id;
+
+CREATE PROCEDURE `mydb`.`send_message` (IN sender_id INT,IN receiver_id INT,IN text longtext )
+BEGIN
+  INSERT INTO message
+         (
+           text, 
+           created_at,
+           sender_id, 
+           receiver_id,
+           updated_at
+         )
+    VALUES 
+         (text,now(),sender_id, receiver_id,now());
+END //
+DELIMITER ;
+
+-- call send_message(1,2,'hello') ;
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`view_messages` (IN receiver_id INT)
+BEGIN
+   SELECT message.text , user.name 
+    FROM message
+        INNER JOIN user 
+      ON user.id = message.sender_id 
+     WHERE message.receiver_id = receiver_id; 
+END //
+DELIMITER ;
+
+-- call mydb.view_messages(2);
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`view_single_message` (IN receiver_id INT)
+BEGIN
+   SELECT message.text , user.name , user.id
+    FROM message
+        INNER JOIN user 
+      ON user.id = message.sender_id 
+     WHERE message.receiver_id = receiver_id AND message.id =(SELECT MAX(message.id) FROM message); 
+END // 
+DELIMITER ;
+
+-- call mydb.view_single_message(2);
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`view_all_messages_between_2_users` (IN receiver_id INT , IN sender_id INT)
+BEGIN
+   SELECT message.text , user.name , user.id
+    FROM message
+        INNER JOIN user 
+      ON user.id = message.sender_id 
+     WHERE message.receiver_id = receiver_id AND message.sender_id=sender_id; 
+END //
+DELIMITER ;
+
+-- call mydb.view_all_messages_between_2_users(1,3);
+
+
+
+
+CREATE PROCEDURE `mydb`.`get_user_reviews` (IN user_id INT)
+begin
+  SELECT * FROM rating r WHERE r.user_id = user_id
+end //
+
+DELIMITER ;
+-- --call mydb.all_products();
+
+
+
+
+DELIMITER //
+CREATE PROCEDURE `mydb`.`sort_products_price` (IN sorting_method int)
+   BEGIN
+  if sorting_method= 0
+    then
+      SELECT product.* , item.price FROM product
+        INNER JOIN item
+          ON item.product_id = product.id
+          ORDER BY item.price ASC;
+  else
+    SELECT product.* , item.price FROM product
+    INNER JOIN item
+    ON item.product_id = product.id
+    ORDER BY item.price DESC;
+  end if;
+   end//
+
+DELIMITER ;
+
+
+call mydb.sort_products(0);
+
 
 drop procedure if exists mydb.get_products_reviews;
 
@@ -648,7 +785,7 @@ begin
           user_id,
           product_id,
           review,
-          create_time,
+          created_at,
           updated_at
         )
     VALUES
@@ -662,8 +799,7 @@ begin
         );
 end //
 
-DROP procedure IF EXISTS my
-db.get_total_rating
+
 
 DELIMITER //
 CREATE PROCEDURE `mydb`.`get_total_rating` (IN products_id INT, OUT res INT)
@@ -677,3 +813,80 @@ end //
 
 DELIMITER ;
 -- call mydb.filterItemsByFeature(1, NULL, 25);
+
+DELIMITER  //
+CREATE PROCEDURE create_banking_info
+     (
+        IN  card_number     VARCHAR(255),
+        IN  card_holder    VARCHAR(255),
+        IN provider  VARCHAR(255) ,
+        IN type   VARCHAR(20),
+        IN user_id INT
+     )
+BEGIN
+    INSERT INTO banking_info
+         (
+           card_number,
+           card_holder,
+           provider,
+           type,
+           user_id
+         )
+    VALUES
+         (card_number, card_holder, provider, type, user_id);
+END //
+
+DELIMITER ;
+
+DELIMITER  //
+CREATE PROCEDURE create_order
+     (
+        IN  user_id     INT,
+        IN  banking_info_id    INT
+     )
+BEGIN
+    INSERT INTO `order`
+         (
+           user_id,
+           banking_info_id
+         )
+    VALUES
+         (user_id, banking_info_id);
+	SET @order_id = LAST_INSERT_ID();
+    SELECT @order_id;
+END //
+
+DELIMITER ;
+
+DELIMITER  //
+CREATE PROCEDURE add_item_to_order
+     (
+        IN  order_id     INT,
+        IN  item_id    INT,
+        IN item_product_id INT,
+        IN count INT
+     )
+BEGIN
+    INSERT INTO order_has_item
+         (
+           order_id,
+           item_id,
+           item_product_id,
+           count
+         )
+    VALUES
+         (order_id, item_id, item_product_id, count);
+END //
+
+DELIMITER ;
+
+DELIMITER //
+ CREATE PROCEDURE get_banking_info (IN banking_info_id INT)
+ Begin
+ SELECT
+      b.card_number, b.card_holder, b.provider, b.type,  b.user_id
+    FROM banking_info b
+    WHERE b.id = banking_info_id;
+
+ END //
+ DELIMITER ;

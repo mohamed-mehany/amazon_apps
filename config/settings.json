@@ -1,0 +1,20 @@
+{
+	"allowedCommands": ["commands.search", "commands.product", "commands.review", "commands.message", "commands.cart", "commands.review", "commands.user"],
+    "dbConfig": {
+        "dbName": "mydb",
+        "dbUserName": "root",
+        "dbPassword": "",
+        "dbPortNumber": "3306",
+        "dbHostName": "127.0.0.1",
+        "mongoDBName": "Amazon",
+        "mongoUser": "admin",
+        "mongoPassword": "password",
+       	"mongoPort": "27017"
+    },
+    "elasticConfig": {
+        "elasticHost": "localhost",
+        "elasticPort": "9300",
+        "elasticIndexName": "amazon",
+        "elasticClusterName": "elasticsearch_ebrahim-elgaml" 
+    }
+}

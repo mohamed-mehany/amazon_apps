@@ -3,8 +3,8 @@ package commands.user;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.util.Map;
-
 import commands.Command;
+
 
 public class AddUserSimpleCmd extends Command implements Runnable {
 

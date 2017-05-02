@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+
 import org.boon.json.implementation.JsonStringDecoder;
 
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonObject.Member;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpContent;
@@ -26,16 +28,20 @@ public class RequestParser implements Runnable {
 	public void run() {
 		try {
 			// CALL DISPATCHER
+
 			HttpContent cc = (HttpContent) (_clientHandle._httpRequest);
 			ByteBuf content = cc.content();
 			JsonObject body = JsonObject.readFrom(content.toString(CharsetUtil.UTF_8));
 			JsonObject jsonData = body.get("data").asObject();
 			String command = body.get("command").asString();
-			String sessionID = body.get("sessionID").asString();
 			Map<String, Object> data = new HashMap<String, Object>();
-			Iterator<JsonObject.Member> temp = jsonData.iterator();
+
+			String sessionID = body.get("sessionID").asString();
+			
+			Iterator<Member> temp = jsonData.iterator();
+
 			while(temp.hasNext()){
-				JsonObject.Member x = temp.next();
+				Member x = temp.next();
 				if (x.getValue().isNumber()){
 					data.put(x.getName(), x.getValue().asInt());
 
@@ -43,6 +49,7 @@ public class RequestParser implements Runnable {
 					data.put(x.getName(), x.getValue().asString());
 				}
 			}
+
 			ClientRequest clientRequest = new ClientRequest(command, sessionID, data);
 			_parseListener.parsingFinished(_clientHandle, clientRequest);
 		} catch (Exception exp) {

@@ -1,13 +1,11 @@
 package commands.review;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Types;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.eclipsesource.json.JsonObject;
 import commands.Command;
 
 public class GetUserRatingsCmd extends Command implements Runnable {
@@ -15,18 +13,15 @@ public class GetUserRatingsCmd extends Command implements Runnable {
 			throws Exception {
 
 		CallableStatement getRatings;
-		StringBuffer strbufResult = null, strbufResponseJSON;
-		String user_id;
-		int nSQLResult;
+		StringBuffer strbufResult = new StringBuffer("");
+		int user_id;
 
-		user_id = (String) mapUserData.get("user_id");
+		user_id = (Integer) mapUserData.get("user_id");
 		
 		getRatings = connection.prepareCall("{call get_user_reviews"+"(?)"+"}");
-		getRatings.setString(1, user_id);
+		getRatings.setInt(1, user_id);
 		ResultSet r = getRatings.executeQuery();
-
-		System.out.println(r.toString());
-		strbufResult = makeJSONResponseEnvelope(getRatings.getInt(1), null, null);
+		strbufResult.append(changeToJSONFormat(r));
 		getRatings.close();
 
 		return strbufResult;

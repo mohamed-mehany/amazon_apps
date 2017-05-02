@@ -1,12 +1,11 @@
 package commands.review;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.Types;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.eclipsesource.json.JsonObject;
 import commands.Command;
 
 public class GetTotalRatingCmd extends Command implements Runnable {
@@ -15,7 +14,7 @@ public class GetTotalRatingCmd extends Command implements Runnable {
 			throws Exception {
 
 		CallableStatement getRatings;
-		StringBuffer strbufResult = null, strbufResponseJSON;
+		StringBuffer strbufResult = new StringBuffer(""), strbufResponseJSON;
 		int user_id, product_id;
 		int nSQLResult;
 
@@ -26,12 +25,8 @@ public class GetTotalRatingCmd extends Command implements Runnable {
 		getRatings.registerOutParameter(2, Types.INTEGER);
 
 		getRatings.execute();
-//		System.out.println("?????");
 		int check = getRatings.getInt(2);
-
-//		System.out.println(check + " ~~~");
-
-		strbufResult = makeJSONResponseEnvelope(3, null, null);
+		strbufResult.append(changeToJSONFormat(check+""));
 		getRatings.close();
 
 		return strbufResult;

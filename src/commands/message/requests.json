@@ -1,0 +1,54 @@
+/////////////////////////////////////////////////
+//send_message
+
+{
+"data": {
+	"sender_id":1,
+	"receiver_id":2,
+	"text":"Testing message app"
+
+},
+"sessionID":"121",
+"command": "sendMessage"
+}  
+
+
+/////////////////////////////////////////////////
+//view_messages
+{
+"data": {
+	"receiver_id":1
+
+},
+"sessionID":"121",
+"command": "viewMessages"
+}
+
+/////////////////////////////////////////////////
+//view_single_message
+
+{
+"data": {
+	"receiver_id":1
+
+},
+"sessionID":"121",
+"command": "viewSingleMessage"
+}
+
+
+
+/////////////////////////////////////////////////
+//view_all_messages_between_2_users
+
+
+{
+"data": {
+	"receiver_id":1,
+	"sender_id":2
+
+},
+"sessionID":"121",
+"command": "viewAllMessage"
+}
+
