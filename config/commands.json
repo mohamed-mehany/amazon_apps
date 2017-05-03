@@ -13,7 +13,8 @@
 		"editProfileInfo":"EditProfileInfoCmd",
 		"login":"LoginCmd",
 		"logout":"LogoutCmd",
-		"viewUserProfile":"ViewUserProfileCmd"		
+		"viewUserProfile":"ViewUserProfileCmd",
+		"GetUserByToken":"GetUserByTokenCmd"		
 	},
     "commands.review": {
         "createRating": "CreateRatingCmd",

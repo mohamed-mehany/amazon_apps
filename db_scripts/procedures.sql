@@ -27,7 +27,7 @@ DROP PROCEDURE IF EXISTS user_logout;
 DROP PROCEDURE IF EXISTS view_product_rating;
 DROP PROCEDURE IF EXISTS view_user;
 DROP PROCEDURE IF EXISTS update_product;
-
+DROP PROCEDURE IF EXISTS get_user;
 DROP PROCEDURE IF EXISTS search_vendor;
 DROP PROCEDURE IF EXISTS search_product;
 DROP PROCEDURE IF EXISTS update_product;
@@ -465,6 +465,15 @@ DELIMITER //
   END //
   DELIMITER ;
 
+  DELIMITER //
+  CREATE PROCEDURE `mydb`.`get_user`(
+   IN n_token varchar(50)
+  )
+  BEGIN
+   select * from user where token = n_token;
+  END //
+  DELIMITER ;
+  
 DELIMITER //
   CREATE PROCEDURE `mydb`.`view_product_rating`(
   u_id int,
