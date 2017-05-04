@@ -56,7 +56,7 @@ public final class Services {
 			serverBoot
 					.childHandler(new ServicesInitializer(sslCtx, _controller));
 			channel = serverBoot.bind(PORT).sync().channel();
-			runReceivers();
+			runReceivers(args[0]);
 			System.err.println("Services running on  "
 					+ (SSL ? "https" : "http") + "://127.0.0.1:" + PORT + '/');
 			channel.closeFuture().sync();
@@ -97,26 +97,28 @@ public final class Services {
 
 	}
 
-	public static void runReceivers() throws Exception {
-		
-		  Timer timerRatings = new Timer(); timerRatings.schedule(new
-		  SayHello("Ratings", "127.0.0.1", "EXCHANGE_SERVER1"), 0, 500);
-		  Timer timerMessages = new Timer(); timerMessages.schedule(new
-		  SayHello("Messages", "127.0.0.1", "EXCHANGE_SERVER1"), 0, 500);
-		  Timer timerUsers = new Timer(); timerUsers.schedule(new
-		  SayHello("Users", "127.0.0.1", "EXCHANGE_SERVER1"), 0, 500);
-		  Timer timerProducts = new Timer();
-		  timerProducts.schedule(new SayHello("Products", "127.0.0.1",
-				"EXCHANGE_SERVER1"), 0, 500);
-		  Timer timerSearch = new Timer();
-		  timerSearch.schedule(new SayHello("Search", "127.0.0.1",
-				"EXCHANGE_SERVER1"), 0, 500);
-		  Timer timerCart = new Timer();
-		  timerCart.schedule(new SayHello("Carts", "127.0.0.1",
-				"EXCHANGE_SERVER1"), 0, 500);
-		  Timer timerProduct = new Timer();
-		  timerProduct.schedule(new SayHello("Vendors", "127.0.0.1",
-				"EXCHANGE_SERVER1"), 0, 500);
+	public static void runReceivers(String str) throws Exception {
+		  Timer timer = new Timer(); timer.schedule(new
+		  SayHello(str, "127.0.0.1", "EXCHANGE_SERVER1"), 0, 500);
+//		  Timer timerRatings = new Timer(); timerRatings.schedule(new
+//		  SayHello(str, "127.0.0.1", "EXCHANGE_SERVER1"), 0, 500);
+//		  Timer timerMessages = new Timer(); timerMessages.schedule(new
+//		  SayHello("Messages", "127.0.0.1", "EXCHANGE_SERVER1"), 0, 500);
+//		  Timer timerUsers = new Timer(); timerUsers.schedule(new
+//		  SayHello("Users", "127.0.0.1", "EXCHANGE_SERVER1"), 0, 500);
+//		  Timer timerProducts = new Timer();
+//		  timerProducts.schedule(new SayHello("Products", "127.0.0.1",
+//				"EXCHANGE_SERVER1"), 0, 500);
+//		  Timer timerSearch = new Timer();
+//		  timerSearch.schedule(new SayHello("Search", "127.0.0.1",
+//				"EXCHANGE_SERVER1"), 0, 500);
+		  
+//		  Timer timerCart = new Timer();
+//		  timerCart.schedule(new SayHello("Carts", "127.0.0.1",
+//				"EXCHANGE_SERVER1"), 0, 500);
+//		  Timer timerProduct = new Timer();
+//		  timerProduct.schedule(new SayHello("Vendors", "127.0.0.1",
+//				"EXCHANGE_SERVER1"), 0, 500);
 //		Timer mohsenTimer = new Timer();
 //		mohsenTimer.schedule(new SayHello("mohsen", "127.0.0.1",
 //				"EXCHANGE_SERVER1"), 0, 500);
