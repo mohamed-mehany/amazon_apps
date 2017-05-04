@@ -1,3 +1,5 @@
+
+
 package controller;
 
 import java.nio.charset.Charset;
@@ -17,45 +19,44 @@ import io.netty.util.CharsetUtil;
 
 public class RequestParser implements Runnable {
 
-	protected ParseListener _parseListener;
-	protected ClientHandle _clientHandle;
+<<<<<<< HEAD
+  protected ParseListener _parseListener;
+  protected ClientHandle _clientHandle;
 
-	public RequestParser(ParseListener parseListener, ClientHandle clientHandle) {
-		_parseListener = parseListener;
-		_clientHandle = clientHandle;
-	}
+  public RequestParser(ParseListener parseListener, ClientHandle clientHandle) {
+    _parseListener = parseListener;
+    _clientHandle = clientHandle;
+  }
 
-	public void run() {
-		try {
-			// CALL DISPATCHER
+  public void run() {
+    try {
+      // CALL DISPATCHER
 
-			HttpContent cc = (HttpContent) (_clientHandle._httpRequest);
-			ByteBuf content = cc.content();
-			JsonObject body = JsonObject.readFrom(content.toString(CharsetUtil.UTF_8));
-			JsonObject jsonData = body.get("data").asObject();
-			String command = body.get("command").asString();
-			Map<String, Object> data = new HashMap<String, Object>();
+      HttpContent cc = (HttpContent) (_clientHandle._httpRequest);
+      ByteBuf content = cc.content();
+      JsonObject body = JsonObject.readFrom(content.toString(CharsetUtil.UTF_8));
+      JsonObject jsonData = body.get("data").asObject();
+      String command = body.get("command").asString();
+      String sessionID = body.get("sessionID").asString();
+      Map<String, Object> data = new HashMap<String, Object>();
+      Iterator<JsonObject.Member> temp = jsonData.iterator();
+      while(temp.hasNext()){
+        JsonObject.Member x = temp.next();
+        if (x.getValue().isNumber()){
+          data.put(x.getName(), x.getValue().asInt());
 
-			String sessionID = body.get("sessionID").asString();
-			
-			Iterator<Member> temp = jsonData.iterator();
+        } else if (x.getValue().isString()) {
+          data.put(x.getName(), x.getValue().asString());
+        }
+      }
+//      System.out.println("*********** "+data.toString());
 
-			while(temp.hasNext()){
-				Member x = temp.next();
-				if (x.getValue().isNumber()){
-					data.put(x.getName(), x.getValue().asInt());
-
-				} else if (x.getValue().isString()) {
-					data.put(x.getName(), x.getValue().asString());
-				}
-			}
-
-			ClientRequest clientRequest = new ClientRequest(command, sessionID, data);
-			_parseListener.parsingFinished(_clientHandle, clientRequest);
-		} catch (Exception exp) {
-			_parseListener.parsingFailed(_clientHandle,
-					"Exception while parsing JSON object " + exp.toString());
-		}
-	}
+      ClientRequest clientRequest = new ClientRequest(command, sessionID, data);
+      _parseListener.parsingFinished(_clientHandle, clientRequest);
+    } catch (Exception exp) {
+      _parseListener.parsingFailed(_clientHandle,
+          "Exception while parsing JSON object " + exp.toString());
+    }
+  }
 
 }

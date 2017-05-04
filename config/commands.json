@@ -14,6 +14,19 @@
 		"login":"LoginCmd",
 		"logout":"LogoutCmd",
 		"viewUserProfile":"ViewUserProfileCmd",
+		"GetUserByToken":"GetUserByTokenCmd"
+	},
+	"commands.order": {
+		"viewUserOrders": "ViewUserOrdersCmd",
+		"viewOrder": "ViewOrderCmd",
+		"viewDeliveredOrders": "ViewDeliveredOrdersCmd",
+		"attemplogin": "AttemptLoginCmd",
+		"createUser":"CreateUserCmd",
+		"createVendor":"CreateVendorCmd",
+		"editProfileInfo":"EditProfileInfoCmd",
+		"login":"LoginCmd",
+		"logout":"LogoutCmd",
+		"viewUserProfile":"ViewUserProfileCmd",
 		"GetUserByToken":"GetUserByTokenCmd"		
 	},
     "commands.review": {
