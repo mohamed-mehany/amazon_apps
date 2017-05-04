@@ -7,9 +7,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+
 import org.boon.json.implementation.JsonStringDecoder;
 
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonObject.Member;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpContent;
@@ -17,6 +19,7 @@ import io.netty.util.CharsetUtil;
 
 public class RequestParser implements Runnable {
 
+<<<<<<< HEAD
   protected ParseListener _parseListener;
   protected ClientHandle _clientHandle;
 

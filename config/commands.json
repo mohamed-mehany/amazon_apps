@@ -1,11 +1,67 @@
 {
+
+	"commands.product": {
+		"indexProducts": "IndexProductsCmd",
+		"sortProducts": "SortProductsCmd",
+		"viewPriceInCart": "ViewPriceOfProductsCartCmd"
+	},		
 	"commands.user": {
 		"addUserSimple": "AddUserSimpleCmd",
-		"attemplogin": "AttemptLoginCmd"		
+		"attemplogin": "AttemptLoginCmd",
+		"createUser":"CreateUserCmd",
+		"createVendor":"CreateVendorCmd",
+		"editProfileInfo":"EditProfileInfoCmd",
+		"login":"LoginCmd",
+		"logout":"LogoutCmd",
+		"viewUserProfile":"ViewUserProfileCmd",
+		"GetUserByToken":"GetUserByTokenCmd"
 	},
 	"commands.order": {
 		"viewUserOrders": "ViewUserOrdersCmd",
 		"viewOrder": "ViewOrderCmd",
-		"viewDeliveredOrders": "ViewDeliveredOrdersCmd"
+		"viewDeliveredOrders": "ViewDeliveredOrdersCmd",
+		"attemplogin": "AttemptLoginCmd",
+		"createUser":"CreateUserCmd",
+		"createVendor":"CreateVendorCmd",
+		"editProfileInfo":"EditProfileInfoCmd",
+		"login":"LoginCmd",
+		"logout":"LogoutCmd",
+		"viewUserProfile":"ViewUserProfileCmd",
+		"GetUserByToken":"GetUserByTokenCmd"		
+	},
+    "commands.review": {
+        "createRating": "CreateRatingCmd",
+        "createValueOnlyRating": "CreateValueOnlyRatingCmd",
+        "getProductRatings":"GetProductRatingsCmd",
+        "getTotalRating":"GetTotalRatingCmd",
+        "getUserRating":"GetUserRatingsCmd"
+	},
+	"commands.search": {
+		"searchOrderByItemName": "SearchOrderByItemNameCmd"	,
+		"searchReviews": "SearchReviewsCmd",
+		"searchProducts": "SearchProductsCmd",
+		"searchProuctHasDepartments": "SearchProductHashDepartmentCmd",
+		"searchDepartments": "SearchDepartmentCmd",
+		"searchItems": "SearchItemCmd",
+		"searchReviwByRating": "SearchReviwByRatingCmd"	
+	},
+	"commands.message": {
+		"sendMessage": "SendMessageCmd",
+		"viewMessages": "ViewMessagesCmd",
+		"viewSingleMessage": "ViewSingleMessageCmd",
+		"viewAllMessage": "ViewAllMessagesBetween2UsersCmd"
+	},
+	"commands.cart": {
+		"AddItemToCart": "AddItemToCartCmd",
+		"ChangeItemQuantity": "ChangeItemQuantityCmd",
+		"ProceedToPayment": "ProceedToPaymentCmd",
+		"RemoveItemFromCart": "RemoveItemFromCartCmd",
+		"ViewCart": "ViewCartCmd",
+		"ViewTotalPrice": "ViewTotalPriceCmd",
+		"CreateBankingInfo": "CreateBankingInfoCmd"
+	},
+	"commands.vendor": {
+		"AddProduct": "AddProductCmd",
+		"DeleteProduct": "DeleteProductCmd"
 	}
 }

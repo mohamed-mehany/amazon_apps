@@ -1,0 +1,44 @@
+http://localhost:8080/Ratings
+
+{
+"data": {
+	"value":3,
+	"user_id":12,
+	"product_id":1,
+	"review":"Averaage"
+},
+"sessionID":"121",
+"command": "createRating", 
+"receivingQueue":"mohsen",
+"requestId":"2"
+}
+
+{
+"data": {
+	"product_id":1
+},
+"sessionID":"121",
+"command": "getProductRatings", 
+"receivingQueue":"mohsen", 
+"requestId":"2"
+}
+
+{
+"data": {
+	"product_id":1
+},
+"sessionID":"121",
+"command": "getTotalRating", 
+"receivingQueue":"mohsen",
+"requestId":"2"
+}
+
+{
+"data": {
+	"user_id":12
+},
+"sessionID":"121",
+"command": "getUserRating", 
+"receivingQueue":"mohsen",
+"requestId":"2"
+}
