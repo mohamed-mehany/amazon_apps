@@ -124,7 +124,7 @@ public class Receiver {
 					String message = new String(body, "UTF-8");
 					System.out.println(tag + " [x] Received '"
 							+ envelope.getRoutingKey() + "':'" + message + "'");
-					sendToNetty(message);
+//					sendToNetty(message);
 				}
 			};
 			try {
