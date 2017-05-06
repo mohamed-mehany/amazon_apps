@@ -15,26 +15,10 @@ public class IndexProductsCmd extends Command implements Runnable {
 	public StringBuffer execute(Connection connection, Map<String, Object> mapUserData)
 			throws Exception {
 		CallableStatement sqlProc;
-		StringBuffer strbufResult = new StringBuffer(""), strbufResponseJSON;
-		System.out.println("he2");
+		StringBuffer strbufResult = new StringBuffer("");
 		sqlProc = connection.prepareCall("{call all_products"+"()"+"}");
-		
-		
 		ResultSet r=sqlProc.executeQuery();
-		ResultSetMetaData rsmd = r.getMetaData();
-		int columnsNumber = rsmd.getColumnCount();
-		
-		
-		while (r.next()) {
-			JsonObject o = new JsonObject();
-
-			for (int i = 1; i <= columnsNumber; i++) {
-				o.add(rsmd.getColumnName(i), r.getString(i));
-			}
-
-			strbufResult.append(o);
-		}
-		r.close();
+		strbufResult.append(changeToJSONFormat(r));
 		sqlProc.close();
 		return strbufResult;
 		

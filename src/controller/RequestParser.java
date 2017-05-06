@@ -19,7 +19,6 @@ import io.netty.util.CharsetUtil;
 
 public class RequestParser implements Runnable {
 
-<<<<<<< HEAD
   protected ParseListener _parseListener;
   protected ClientHandle _clientHandle;
 

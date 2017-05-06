@@ -31,10 +31,18 @@ public class Receiver {
 	static class SayHello extends TimerTask {
 		Receiver receive =  null;
 		public void run() {
-
-			receive = new Receiver("mohsen", "localhost",
-					"EXCHANGE_SERVER1");
-			receive.Receive();
+			
+			try {
+				String rabbit_server = JsonObject.readFrom(new FileReader("config/settings.json"))
+						.get("rabbitmq").asString();
+				receive = new Receiver("mohsen", rabbit_server,
+						"EXCHANGE_SERVER1");
+				receive.Receive();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 	}
 
@@ -77,7 +85,7 @@ public class Receiver {
 	}
 
 	public void connect() {
-		 factory = new ConnectionFactory();
+		factory = new ConnectionFactory();
 		factory.setHost(server_ip);
 		factory.setUsername("user");
 		factory.setPassword("password");
