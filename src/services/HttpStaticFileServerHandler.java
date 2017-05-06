@@ -95,7 +95,6 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 		return false;
 	}
 	
-    @Override
     public void messageReceived(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
     
         if (!request.decoderResult().isSuccess()) {
@@ -414,5 +413,10 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 		
 		response.headers().set( CONTENT_TYPE, strContentType );
     }
+
+	@Override
+	protected void channelRead0(ChannelHandlerContext arg0, FullHttpRequest arg1) throws Exception {
+		messageReceived(arg0, arg1);
+	}
 	
 }

@@ -1,0 +1,33 @@
+// viewDeliveredOrders
+{
+	"data": 
+	{
+		"user_id": 1
+	},  
+	"sessionID": "123",
+	"command":"viewDeliveredOrders",
+  	"receivingQueue": "Order",
+  	"requestId": 1
+}
+// viewOrder
+{
+	"data": 
+	{
+		"order_id": 7
+	},  
+	"sessionID": "123",
+	"command":"viewOrder",
+  	"receivingQueue": "Order",
+  	"requestId": 1
+}
+// viewUserOrders
+{
+	"data": 
+	{
+		"user_id": 1
+	},  
+	"sessionID": "123",
+	"command":"viewUserOrders",
+  	"receivingQueue": "Order",
+  	"requestId": 1
+}

@@ -1,0 +1,107 @@
+// Create User
+/User
+{
+   "data": {
+      "email": "name@gmail.com",
+      "password": "1234",
+      "name": "name",
+     "address": "add123",
+     "date_of_birth": "2012.01.01 12:12:12",
+     "token": "2243132322",
+     "gender": 1
+  },
+  "sessionID": "123",
+  "command": "CreateUser",
+  "receivingQueue": "mohsen",
+  "requestId": 2
+}
+
+
+// Create vendor
+/User
+{
+   "data": {
+      "email": "vendor@gmail.com",
+      "password": "1234",
+      "name": "vendor",
+     "address": "add1232",
+     "date_of_birth": "2012.01.01 12:12:12",
+     "token": "224332322",
+     "strGender": 1
+  },
+  "sessionID": "124",
+  "command": "CreateVendor",
+  "receivingQueue": "mohsen",
+  "requestId": 2
+}
+
+
+// get login
+/User
+{
+   "data": {
+    "email": "name@gmail.com",
+      "password": "1234"
+  },
+  "sessionID": "124",
+  "command": "login",
+  "receivingQueue": "mohsen",
+  "requestId": 2
+}
+
+
+// get logout
+/User
+{
+   "data": {
+    "token": "224332322",
+      "id": 1
+  },
+  "sessionID": "124",
+  "command": "logout",
+  "receivingQueue": "mohsen",
+  "requestId": 2
+}
+
+
+// get view User Profile
+/User
+{
+   "data": {
+      "id": 1
+  },
+  "sessionID": "124",
+  "command": "viewUserProfile",
+  "receivingQueue": "mohsen",
+  "requestId": 2
+}
+
+
+// Edit user profile 
+/User
+{
+   "data": {
+   	  "user_id": 1
+      "email": "name2@gmail.com",
+      "name": "name2",
+     "address": "address1232",
+     "date_of_birth": "2013.01.01 12:12:12"
+  },
+  "sessionID": "124",
+  "command": "EditProfileInfo",
+  "receivingQueue": "mohsen",
+  "requestId": 2
+}
+
+
+// get user by token 
+/User
+{
+   "data": {
+    "token": "224332322"
+  },
+  "sessionID": "124",
+  "command": "GetUserByToken",
+  "receivingQueue": "mohsen",
+  "requestId": 2
+}

@@ -63,7 +63,6 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 		return false;
 	}
 
-	@Override
 	protected void messageReceived(ChannelHandlerContext ctx, Object msg) {
 
 		System.err.println(" got a request: " + msg);
@@ -108,8 +107,8 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 	}
 
 	private boolean writeResponse(HttpObject currentObj, ChannelHandlerContext ctx) {
-		// Decide whether to close the connection or not.
-		boolean keepAlive = HttpHeaderUtil.isKeepAlive(request);
+//		boolean keepAlive = HttpHeaderUtil.isKeepAlive(request);
+		boolean keepAlive = true;
 		// Build the response object.
 		FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1,
 				currentObj.decoderResult().isSuccess() ? OK : BAD_REQUEST,
@@ -138,5 +137,11 @@ public class ServicesHandler extends SimpleChannelInboundHandler<Object> {
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
 		cause.printStackTrace();
 		ctx.close();
+	}
+
+	@Override
+	protected void channelRead0(ChannelHandlerContext arg0, Object arg1) throws Exception {
+		messageReceived(arg0, arg1);
+		
 	}
 }
